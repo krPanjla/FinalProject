@@ -69,7 +69,8 @@ public class SplashActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 //Checking is the user is logged in
                 if(user != null){
-                    Toast.makeText(getApplicationContext(),"You are Signed in, Welcome to Project Android",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),"You are Signed in, Welcome to Project Android",Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 }else{
                     //Else statement run if the use is not sign in
                     //for lambda function ()-> use java version 1.8+ low java version do't support lambda function
@@ -96,7 +97,7 @@ public class SplashActivity extends AppCompatActivity {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 Toast.makeText(getApplicationContext(),"Your are Logged in "+user.getDisplayName(),Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, MainActivity.class));
+                startActivity(new Intent(this, UserNameImageActivity.class));
                 // ...
             } else {
                 Toast.makeText(getApplicationContext(),"Sorry you aren't able to make it",Toast.LENGTH_SHORT).show();
