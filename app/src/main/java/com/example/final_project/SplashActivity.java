@@ -1,13 +1,16 @@
 package com.example.final_project;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
+import com.example.final_project.CheckService.GoogleServices;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,10 +47,11 @@ public class SplashActivity extends AppCompatActivity {
          * @Initialize , The mFirebaseAuth.
          * **/
         mFirebaseAuth = FirebaseAuth.getInstance();
-
+        //Anonymous user are only for development purpose on release it get removed
         providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build());
+                new AuthUI.IdpConfig.GoogleBuilder().build(),
+                new AuthUI.IdpConfig.AnonymousBuilder().build());
 //                new AuthUI.IdpConfig.FacebookBuilder().build(),
 //                new AuthUI.IdpConfig.TwitterBuilder().build());
 
@@ -62,9 +66,23 @@ public class SplashActivity extends AppCompatActivity {
                 .build();*/
 
 
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        //Checking for google play services
+        if (!GoogleServices.checkGooglePlayServices(this)) {
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle("No Google Play Services");
+            alertDialog.setMessage("This app requires Google Play Services to be installed and enabled");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            finish();
+                            System.exit(0);
+                        }
+                    });
+            alertDialog.show();
+
+        }else{
+            mAuthStateListener = firebaseAuth -> {
                 //@Variable user, Is store the user currently sign in ,if no user logged in it show null
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 //Checking is the user is logged in
@@ -78,14 +96,14 @@ public class SplashActivity extends AppCompatActivity {
                     //for lambda function ()-> use java version 1.8+ low java version do't support lambda function
                     new Handler().postDelayed(()->startActivityForResult(AuthUI.getInstance()
                                     .createSignInIntentBuilder()
+                                    .setLogo(R.mipmap.ic_launcher_round)
                                     .setIsSmartLockEnabled(false)
                                     .setAvailableProviders(providers)
                                     .build(),
                             RC_SIGN_IN),1000);
                 }
-            }
-        };
-
+            };
+        }
     }
 
     @Override
