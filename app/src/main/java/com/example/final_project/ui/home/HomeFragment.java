@@ -18,7 +18,7 @@ import com.example.final_project.R;
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
-
+    //todo : add list view in this activity
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =

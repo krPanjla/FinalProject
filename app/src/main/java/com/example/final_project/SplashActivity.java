@@ -88,7 +88,11 @@ public class SplashActivity extends AppCompatActivity {
                 //Checking is the user is logged in
                 if(user != null){
                     //Toast.makeText(getApplicationContext(),"You are Signed in, Welcome to Project Android",Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                    new Handler().postDelayed(
+                            ()->startActivity(new Intent(SplashActivity.this, MainActivity.class)
+                                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)),
+                            1000);
+
                 }else{
                     //Else statement run if the use is not sign in
 
@@ -116,8 +120,8 @@ public class SplashActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                Toast.makeText(getApplicationContext(),"Your are Logged in "+user.getDisplayName(),Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(this, UserNameImageActivity.class));
+                Toast.makeText(getApplicationContext(),"Your are Logged in "+user.getDisplayName(),Toast.LENGTH_SHORT).show();
                 // ...
             } else {
                 Toast.makeText(getApplicationContext(),"Sorry you aren't able to make it",Toast.LENGTH_SHORT).show();
