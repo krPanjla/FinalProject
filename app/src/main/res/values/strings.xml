@@ -12,4 +12,9 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+
+    <string name="twitter_consumer_key" translatable="false">uuOjlXdSNioHKcJjldMlE1kvo</string>
+    <string name="twitter_consumer_secret" translatable="false">w6qRy3wiAkngl51ghggl8MeEyBMPLM0Zd2fnFZuTVifjGIg5iH</string>
+    <string name="twitter_bearer_token" translatable="false">wAAAAAAAAAAAAAAAAAAAAANskGAEAAAAAFH6EH9Oyv6X4%2Bh9gBIVt8ecX6%2Bo%3DbGHIpvaEmxyhouJbArW2tS8EO7VNMGvzl424KriUN3dO23Yum6</string>
+
 </resources>

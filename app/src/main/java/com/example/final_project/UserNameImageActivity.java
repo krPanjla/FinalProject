@@ -23,15 +23,15 @@ public class UserNameImageActivity extends AppCompatActivity {
         uname = findViewById(R.id.text1);
         //TODO : Add photo picker in on clicking on Image id(imageView)Gallery and Camera both
         //check if the name is empty then can't go to next Activity
-        if(!uname.getText().toString().isEmpty())
-        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(UserNameImageActivity.this,MainActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            }
-        });
-        else
+        if(!uname.getText().toString().isEmpty()){
+            findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(UserNameImageActivity.this,MainActivity.class)
+                            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                }
+            });
+        }else
             Snackbar.make(findViewById(R.id.ll),"Name Can't be empty",Snackbar.LENGTH_LONG)
                     .show();
     }
