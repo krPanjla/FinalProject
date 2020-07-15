@@ -73,6 +73,8 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 }else{
                     //Else statement run if the use is not sign in
+
+                    // Create and launch sign-in intent
                     //for lambda function ()-> use java version 1.8+ low java version do't support lambda function
                     new Handler().postDelayed(()->startActivityForResult(AuthUI.getInstance()
                                     .createSignInIntentBuilder()
