@@ -24,10 +24,10 @@
     android:layout_marginTop="20dp"
     android:text="Please provide your full-name and progilr photo"></TextView>
     <androidx.cardview.widget.CardView
+        android:id="@+id/image_card_view"
         android:layout_width="150dp"
         android:layout_marginTop="10dp"
         android:layout_height="150dp"
-
         android:layout_gravity="center"
         app:cardCornerRadius="80dp">
         <ImageView
@@ -38,22 +38,21 @@
             android:src="@mipmap/universal_image"
             ></ImageView>
     </androidx.cardview.widget.CardView>
-
-
-
-
-
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/text1"
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+    <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/text_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
             android:hint="Name"
             android:textSize="14sp" ></com.google.android.material.textfield.TextInputEditText>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/next_button"
         android:layout_width="match_parent"
         android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
