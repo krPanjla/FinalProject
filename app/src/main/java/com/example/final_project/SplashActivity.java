@@ -4,10 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.animation.ValueAnimator;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.final_project.CheckService.GoogleServices;
@@ -40,10 +44,15 @@ public class SplashActivity extends AppCompatActivity {
     private boolean flag =true;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private Object View;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        //Animation for splash text
+        Animation animationUtils = AnimationUtils.loadAnimation(this,R.anim.anim);
+
 
         /**@Decleartion provides, Here we are going to make permissions of Email,Phone and Gmail.
          * @Initialize , The mFirebaseAuth.
