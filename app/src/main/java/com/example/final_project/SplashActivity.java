@@ -108,7 +108,7 @@ public class SplashActivity extends AppCompatActivity {
                     //Toast.makeText(getApplicationContext(),"You are Signed in, Welcome to Project Android",Toast.LENGTH_LONG).show();
                    if(flag){
                        new Handler().postDelayed(
-                               ()->startActivity(new Intent(SplashActivity.this, MainActivity.class)
+                               ()->startActivity(new Intent(SplashActivity.this, RootActivity.class)
                                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)),
                                1000);
                    }
