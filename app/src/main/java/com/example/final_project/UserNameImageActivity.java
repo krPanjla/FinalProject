@@ -27,6 +27,7 @@ public class UserNameImageActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE=1;
     private CardView cardView;
     private ImageView imageView;
+    private Bitmap bitmap;
     static final int SELECT_FILE=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,12 +67,12 @@ public class UserNameImageActivity extends AppCompatActivity {
 
             }
         });
-        //TODO : Add photo picker in on clicking on Image id(imageView)Gallery and Camera both
         //check if the name is empty then can't go to next Activity
         if(!uname.getText().toString().isEmpty()){
             findViewById(R.id.next_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    dataEnterToDatabase(uname.getText().toString(),bitmap);
                     startActivity(new Intent(UserNameImageActivity.this,RootActivity.class)
                             .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 }
@@ -86,15 +87,21 @@ public class UserNameImageActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
             Bundle extras=data.getExtras();
-            Bitmap bitmap= (Bitmap) extras.get("data");
+            bitmap= (Bitmap) extras.get("data");
+            if(bitmap != null)
             imageView.setImageBitmap(bitmap);
 
         }
         else if(requestCode==SELECT_FILE){
             Uri selectedImage=data.getData();
+            if(selectedImage != null)
             imageView.setImageURI(selectedImage);
 
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private boolean dataEnterToDatabase(String name, Bitmap image){
+        return false;
     }
 }

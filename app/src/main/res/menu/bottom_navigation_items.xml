@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-<item android:title="Home"
-    android:icon="@drawable/home_icon"
-    android:id="@+id/nav_home1"/>
-    <item android:title="Due Payments"
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/title_home"
+        android:icon="@drawable/home_icon"
+        android:id="@+id/nav_home1" />
+
+    <item android:title="@string/title_due_pament"
         android:icon="@drawable/due_payment_icon"
         android:id="@+id/due_payments"/>
-    <item android:title="Settings"
+
+    <item android:title="@string/title_setting"
         android:icon="@drawable/settings_icon"
         android:id="@+id/settings"/>
 </menu>

@@ -1,10 +1,12 @@
-package com.example.final_project.Daatabase;
+package com.example.final_project.Daatabase.useradate;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+
+import com.example.final_project.Daatabase.useradate.BlankContract;
 
 class UserDatadbHelper extends SQLiteOpenHelper {
     /** @Variable CREATE_LOGIN_USER, use to create user table in the application

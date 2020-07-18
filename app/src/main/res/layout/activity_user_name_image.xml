@@ -22,7 +22,7 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:layout_marginTop="20dp"
-    android:text="Please provide your full-name and progilr photo"></TextView>
+    android:text="Please provide your full-name and progilr photo"/>
     <androidx.cardview.widget.CardView
         android:id="@+id/image_card_view"
         android:layout_width="150dp"

@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.example.final_project.ui.home.HomeFragment;
+import com.example.final_project.ui.payments.PaymentsFragment;
+import com.example.final_project.ui.settings.SettingsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class RootActivity extends AppCompatActivity {
