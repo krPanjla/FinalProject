@@ -72,7 +72,7 @@ public class UserNameImageActivity extends AppCompatActivity {
             findViewById(R.id.next_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(UserNameImageActivity.this,MainActivity.class)
+                    startActivity(new Intent(UserNameImageActivity.this,RootActivity.class)
                             .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 }
             });
