@@ -14,19 +14,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".RootActivity">
+
+        </activity>
+        <activity android:name=".Daatabase.BorrowersDB.add_borrower">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".add_borrower" />
+       </activity>
         <activity android:name=".UserNameImageActivity">
 
         </activity>
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.NoActionBar" >
+
+        </activity>
     </application>
 
 </manifest>
