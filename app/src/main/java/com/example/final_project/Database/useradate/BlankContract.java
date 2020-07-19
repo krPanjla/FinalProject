@@ -1,4 +1,4 @@
-package com.example.final_project.Daatabase.useradate;
+package com.example.final_project.Database.useradate;
 
 import android.provider.BaseColumns;
 
@@ -14,7 +14,6 @@ public class BlankContract {
         public final static String LOGIN_TABLE_NAME = "finalUser_user";
         public final static String COLUMNS_USER_NAME = "name";
         public final static String COLUMNS_USER_GENDER = "gender";
-        public static final String COLUMNS_USER_DOB = "dob";
         public static final String COLUMNS_USER_PHONE = "phone";
         public final static String COLUMNS_USER_PASSWORD = "password";
         public final static String COLUMNS_USER_IMAGE = "image";

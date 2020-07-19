@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.final_project.Daatabase.BorrowersDB.Borrowers_Dd;
+import com.example.final_project.Database.BorrowersDB.Borrowers_Dd;
 
 public class add_borrower extends AppCompatActivity {
     Borrowers_Dd borrowers_db;

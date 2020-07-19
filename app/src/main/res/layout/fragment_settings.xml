@@ -45,5 +45,14 @@
 
        </LinearLayout>
     </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:id="@+id/signout"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:text="@string/action_sign_out"
+        android:layout_marginLeft="10dp" />
 
 </LinearLayout>

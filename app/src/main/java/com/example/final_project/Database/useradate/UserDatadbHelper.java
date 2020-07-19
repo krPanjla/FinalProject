@@ -1,4 +1,4 @@
-package com.example.final_project.Daatabase.useradate;
+package com.example.final_project.Database.useradate;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -6,18 +6,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-import com.example.final_project.Daatabase.useradate.BlankContract;
-
-class UserDatadbHelper extends SQLiteOpenHelper {
+public class UserDatadbHelper extends SQLiteOpenHelper {
     /** @Variable CREATE_LOGIN_USER, use to create user table in the application
      * @Variable USERDATA_TABLE_VERSION , version control in UserData table
      * @Variable DROP_LOGIN_TABLE ,use to drop Final_Project userData table
      * */
 
-    private final static String CREATE_LOGIN_USER = "CREATE TABLE "+ BlankContract.BlankEnter.LOGIN_TABLE_NAME+"( " +
+    public final static String CREATE_LOGIN_USER = "CREATE TABLE "+ BlankContract.BlankEnter.LOGIN_TABLE_NAME+"( " +
             BlankContract.BlankEnter._ID+" TEXT NOT NULL PRIMARY KEY," +
             BlankContract.BlankEnter.COLUMNS_USER_NAME+" TEXT NOT NULL ,"+
-            BlankContract.BlankEnter.COLUMNS_USER_DOB+" TEXT ,"+
             BlankContract.BlankEnter.COLUMNS_USER_GENDER+" INTEGER ,"+
             BlankContract.BlankEnter.COLUMNS_USER_PHONE+" INTEGER," +
             BlankContract.BlankEnter.COLUMNS_USER_PASSWORD+" PASSWORD ,"+

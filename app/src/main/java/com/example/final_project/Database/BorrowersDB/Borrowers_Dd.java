@@ -1,4 +1,4 @@
-package com.example.final_project.Daatabase.BorrowersDB;
+package com.example.final_project.Database.BorrowersDB;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

@@ -144,9 +144,16 @@ public class SplashActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                startActivity(new Intent(this, UserNameImageActivity.class));
-                Toast.makeText(getApplicationContext(),"Your are Logged in "+user.getDisplayName(),Toast.LENGTH_SHORT).show();
-                // ...
+                if(user!=null) {
+                 //Send the Extra With intent
+                    startActivity(new Intent(this, UserNameImageActivity.class)
+                            .putExtra("Email", user.getEmail())
+                            .putExtra("name",user.getDisplayName())
+                            .putExtra("image",user.getPhotoUrl())
+                            .putExtra("phone",user.getPhoneNumber())
+                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    Toast.makeText(getApplicationContext(), "Your are Logged in " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+                }
             } else {
                 Toast.makeText(getApplicationContext(),"Sorry you aren't able to make it",Toast.LENGTH_SHORT).show();
                 // Sign in failed. If response is null the user canceled the

@@ -29,7 +29,7 @@ private SettingsFragment settingsFragment;
         homeFragment=new HomeFragment();
         setFragment(homeFragment);
         paymentsFragment=new PaymentsFragment();
-        settingsFragment=new SettingsFragment();
+        settingsFragment=new SettingsFragment(this);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

@@ -1,10 +1,10 @@
-package com.example.final_project.Daatabase.useradate;
+package com.example.final_project.Database.useradate;
 
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-class UserDatadbProvider {
+public class UserDatadbProvider {
 
     SQLiteDatabase read;
     SQLiteDatabase write;
