@@ -13,23 +13,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RootActivity">
-
-        </activity>
-        <activity android:name=".Daatabase.BorrowersDB.add_borrower">
+        <activity android:name=".RootActivity" />
+        <activity android:name=".add_borrower" />
+        <activity android:name=".UserNameImageActivity" />
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-       </activity>
-        <activity android:name=".UserNameImageActivity">
-
-        </activity>
-        <activity
-            android:name=".SplashActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" >
-
         </activity>
     </application>
 

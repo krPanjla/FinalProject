@@ -8,13 +8,9 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
@@ -24,7 +20,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.final_project.Database.useradate.BlankContract;
@@ -32,9 +27,6 @@ import com.example.final_project.Database.useradate.UserDatadbHelper;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.util.concurrent.RunnableFuture;
 
 public class UserNameImageActivity extends AppCompatActivity {
 
@@ -171,6 +163,7 @@ public class UserNameImageActivity extends AppCompatActivity {
         ContentValues values = new ContentValues();
         try {
             sqLiteDatabase = mdbHelper.getWritableDatabase();
+            Log.e(TAG,""+getIntent().getStringExtra("phone")+" "+getIntent().getStringExtra("email"));
             values.put(BlankContract.BlankEnter._ID ,email);
             values.put(BlankContract.BlankEnter.COLUMNS_USER_NAME,u_name.getText().toString());
             if(image != null) {
@@ -185,10 +178,9 @@ public class UserNameImageActivity extends AppCompatActivity {
         }catch(Exception ignored){
 
         }
-        long result = -22;
+        long result = -1;
         if(sqLiteDatabase != null) result = sqLiteDatabase.insert(BlankContract.BlankEnter.LOGIN_TABLE_NAME, BlankContract.BlankEnter._ID,values);
-
-        if(result==-22) return false;
-        else return result == 0;
+        Log.e(TAG,result+"");
+        return result != -1;
     }
 }

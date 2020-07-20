@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.final_project.Daatabase.BorrowersDB.add_borrower"
+    tools:context="com.example.final_project.add_borrower"
     android:padding="20dp">
 
     <com.google.android.material.textfield.TextInputLayout
@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="ID"
-            android:id="@+id/enterid"/>
+            android:id="@+id/enter_id"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -28,8 +28,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Name"
-            android:id="@+id/entermail"/>
+            android:hint="date"
+            android:id="@+id/enter_mail"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -40,17 +40,18 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/enterammount"
-            android:hint="Enter Ammount"
+            android:id="@+id/enter_amount"
+            android:hint="Enter Amount"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/button_done"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingRight="20dp"
+        android:paddingLeft="20dp"
         android:text="Done"
-
-        android:layout_marginTop="10dp"
-        />
+        android:layout_marginTop="10dp" />
    </LinearLayout>

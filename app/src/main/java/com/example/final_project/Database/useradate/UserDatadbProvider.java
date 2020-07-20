@@ -14,6 +14,7 @@ public class UserDatadbProvider {
      * */
     public UserDatadbProvider(UserDatadbHelper userDatadbHelper){
         read = userDatadbHelper.getReadableDatabase();
+        write = userDatadbHelper.getWritableDatabase();
     }
     public int getCount(){
         Cursor cursor = read.query(BlankContract.BlankEnter.LOGIN_TABLE_NAME, null, null, null, null, null, null);
