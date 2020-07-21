@@ -31,6 +31,7 @@ import com.example.final_project.firebaseConnection.UserData;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Objects;
 
 public class UserNameImageActivity extends AppCompatActivity {
@@ -70,53 +71,56 @@ public class UserNameImageActivity extends AppCompatActivity {
         u_name.setText(name);
         imageView=findViewById(R.id.imageView);
         String url = getIntent().getStringExtra("image");
-        ProgressBar progressBar = new ProgressBar(this);
+        progressBar = new ProgressBar(this);
         progressBar.setVisibility(View.VISIBLE);
-        progressBar.setIndeterminate(true);
 
         Log.e(TAG,url+":image url");
+        if(getIntent().getStringExtra("image") != null)
         Glide.with(getApplicationContext())
                     .load(getIntent().getStringExtra("image"))
                     .placeholder(R.drawable.account_pic)
                     .into(imageView);
-        progressBar.setVisibility(View.GONE);
+        else{
+            connect.downloadImage("prof_image",email);
+            Glide.with(getApplicationContext())
+                    .load(connect.downloadImageUri)
+                    .placeholder(R.drawable.account_pic)
+                    .into(imageView);
+        }
 
-
+        progressBar.setVisibility(ProgressBar.INVISIBLE);
         cardView=findViewById(R.id.image_card_view);
         button = findViewById(R.id.next_button);
 
-        cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        cardView.setOnClickListener(v -> {
 
-                PopupMenu popupMenu=new PopupMenu(getApplicationContext(),cardView);
-                popupMenu.getMenuInflater().inflate(R.menu.choose_image,popupMenu.getMenu());
-                popupMenu.setOnMenuItemClickListener(item -> {
-                    switch (item.getItemId()){
-                        case R.id.camera:
-                            Intent camera =new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            if (camera.resolveActivity(getPackageManager())!=null){
-                                startActivityForResult(Intent.createChooser(camera,"Select Source"),REQUEST_IMAGE_CAPTURE);
-                        }
-                            break;
-                        case R.id.gallery:
-                            Intent gallery =new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            gallery.setType("image/*");
-                            if (gallery.resolveActivity(getPackageManager())!=null){
-                            startActivityForResult(Intent.createChooser(gallery,"Select Source"),SELECT_FILE);
-                            break;}
+            PopupMenu popupMenu=new PopupMenu(getApplicationContext(),cardView);
+            popupMenu.getMenuInflater().inflate(R.menu.choose_image,popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()){
+                    case R.id.camera:
+                        Intent camera =new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        if (camera.resolveActivity(getPackageManager())!=null){
+                            startActivityForResult(Intent.createChooser(camera,"Select Source"),REQUEST_IMAGE_CAPTURE);
                     }
-                    return true;
-                });
-                popupMenu.show();
+                        break;
+                    case R.id.gallery:
+                        Intent gallery =new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        gallery.setType("image/*");
+                        if (gallery.resolveActivity(getPackageManager())!=null){
+                        startActivityForResult(Intent.createChooser(gallery,"Select Source"),SELECT_FILE);
+                        break;}
+                }
+                return true;
+            });
+            popupMenu.show();
 
-            }
         });
         //check if the name is empty then can't go to next Activity
         button.setOnClickListener(v -> {
             progressBar.setVisibility(ProgressBar.VISIBLE);
             if(!u_name.getText().toString().isEmpty()){
-                Snackbar.make(findViewById(R.id.ll),"Thankyou!!",Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.ll2),"Welcome!!",Snackbar.LENGTH_LONG).show();
 
                 if(dataEnterToDatabase(u_name.getText().toString(),bitmap)){
                     progressBar.setVisibility(ProgressBar.INVISIBLE);
@@ -129,20 +133,10 @@ public class UserNameImageActivity extends AppCompatActivity {
                     new AlertDialog.Builder(UserNameImageActivity.this)
                             .setMessage("Your information don't save in the app's database ,which cause bad behavior of app.\n " +
                                     "To store your information in the app go to setting ")
-                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    startActivity(new Intent(UserNameImageActivity.this,RootActivity.class)
-                                            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                                }
-                            })
-                            .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    startActivity(new Intent(UserNameImageActivity.this,RootActivity.class)
-                                            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                                }
-                            })
+                            .setPositiveButton("Ok", (dialog, which) -> startActivity(new Intent(UserNameImageActivity.this,RootActivity.class)
+                                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)))
+                            .setNegativeButton("cancel", (dialog, which) -> startActivity(new Intent(UserNameImageActivity.this,RootActivity.class)
+                                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)))
                             .setCancelable(true)
                             .setTitle("Alert")
                             .show();
@@ -156,19 +150,20 @@ public class UserNameImageActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
-        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null && data.getData() != null){
+        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK ){
             Bundle extras=data.getExtras();
+            assert extras != null;
             bitmap= (Bitmap) extras.get("data");
             imageView.setImageBitmap(bitmap);
             bitmap = imageView.getDrawingCache();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] imagedata = baos.toByteArray();
-            connect.uploadImageToStorage("prof_image",email+""+ MimeTypeMap.getFileExtensionFromUrl(String.valueOf(mImageUrl)),imagedata);
+            connect.uploadImageToStorage("prof_image",email+"."+"jpeg",imagedata);
         }
         else if(requestCode==SELECT_FILE && resultCode == RESULT_OK && data != null && data.getData() != null){
             Uri selectedImage = data.getData();
-            connect.uploadImageToStorage("prof_image",email+""+ MimeTypeMap.getFileExtensionFromUrl(String.valueOf(mImageUrl)),selectedImage);
+            connect.uploadImageToStorage("prof_image",email+"."+ MimeTypeMap.getFileExtensionFromUrl(String.valueOf(mImageUrl)),selectedImage);
             Glide.with(this).load(selectedImage).into(imageView);
         }
         super.onActivityResult(requestCode, resultCode, data);

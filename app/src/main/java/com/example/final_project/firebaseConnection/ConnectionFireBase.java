@@ -1,34 +1,26 @@
 package com.example.final_project.firebaseConnection;
 
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
-import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.firebase.ui.auth.data.model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
-import java.util.Objects;
+import java.io.IOException;
 
 import static android.content.ContentValues.TAG;
 
@@ -61,6 +53,7 @@ public class ConnectionFireBase {
     }
 
     public void setName(UserData data){
+        myRef.child("member");
         myRef.push().setValue(data);
         Log.e(TAG,"Data Set to database");
     }
@@ -121,23 +114,44 @@ public class ConnectionFireBase {
                     n.setProgress(progress);
                 });
     }
-
-    public void downloadImage(){
-        /*File localFile = File.createTempFile("FinalProject","sajf.jpg");
-        riversRef.getFile(localFile)
-                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        // Successfully downloaded data to local file
-                        // ...
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
+    /**
+     * <p>return the url od the image of given location,name</p>
+     * @param location ,where image has to be stored in the database
+     * @param imageName name of the image
+     * */
+    public void downloadImage(String location, String imageName) {
+        StorageReference riversRef = mStorageRef.child(location+"/"+imageName);
+        riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()  {
+            // Got the download URL for 'users/me/profile.png'
             @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle failed download
-                // ...
+            public void onSuccess(Uri uri) {
+                downloadImageUri = uri;
+
+                Log.e(TAG, "download image url : " + downloadImageUri.toString());
+                }
+        }).addOnFailureListener(exception -> {
+            // Handle any errors
+        });
+    }
+
+    public String getEmail(){
+        final String[] value = new String[1];
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                value[0] = dataSnapshot.getValue(String.class);
+                Log.d(TAG, "Value is: " + value[0]);
             }
-        });*/
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+        return value[0];
     }
 
 }
