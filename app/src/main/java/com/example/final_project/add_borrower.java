@@ -44,25 +44,30 @@ public class add_borrower extends AppCompatActivity {
           @Override
           public void onClick(View v) {
 
-              if(!id.getText().toString().isEmpty() && !amount.getText().toString().isEmpty() || !email.getText().toString().isEmpty()  ){
+              if(id.getText().toString().isEmpty() && amount.getText().toString().isEmpty() || email.getText().toString().isEmpty()  ) {
                   //fetching values from edit texts
                   i = id.getText().toString().trim();
                   e = email.getText().toString().trim();
                   a = Float.parseFloat(amount.getText().toString().trim());
+
+
+                  //save contact is a method in database class which inserts the values to the table
+
+                  boolean rowCount = saveContact();
+
+                  if (rowCount) {
+                      Toast.makeText(add_borrower.this, "inserted", Toast.LENGTH_SHORT).show();
+                  } else
+                      //#Pro line Bro :) :)
+                      Toast.makeText(add_borrower.this, "pehli fursat m nikal", Toast.LENGTH_SHORT).show();
+                  s();
+              }else{
+                  if(amount.getText().toString().trim().isEmpty())
+                      Toast.makeText(getApplicationContext(),"You can't left amount empty",Toast.LENGTH_SHORT).show();
+
+                  if(id.getText().toString().trim().isEmpty())
+                      Toast.makeText(getApplicationContext(),"You can't left id empty",Toast.LENGTH_SHORT).show();
               }
-
-              //save contact is a method in database class which inserts the values to the table
-
-              boolean rowCount= saveContact();
-
-              if(rowCount) {
-                  Toast.makeText(add_borrower.this, "inserted", Toast.LENGTH_SHORT).show();
-              }
-
-              else
-                 //#Pro line Bro :) :)
-                 Toast.makeText(add_borrower.this, "pehli fursat m nikal", Toast.LENGTH_SHORT).show();
-              s();
           }
       });
 

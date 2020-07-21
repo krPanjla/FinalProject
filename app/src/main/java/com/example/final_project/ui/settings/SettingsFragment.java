@@ -3,44 +3,31 @@ package com.example.final_project.ui.settings;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.example.final_project.Database.useradate.UserDatadbHelper;
 import com.example.final_project.R;
 import com.example.final_project.firebaseConnection.ConnectionFireBase;
 import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.ui.phone.CountryListSpinner;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -68,31 +55,11 @@ public class SettingsFragment extends Fragment {
 
 
         progressBar.setVisibility(ProgressBar.VISIBLE);
-        Uri url = connect.downloadImageUri;
-        if(url != null){
-            Log.e(TAG,url.getAuthority()+" "+url.getPath()+" "+url.getHost());
-            Glide.with(this)
-                    .load(new File(Objects.requireNonNull(url.getPath())))
-                    .listener(new RequestListener<Drawable>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                            progressBar.setVisibility(View.INVISIBLE);
-                            Log.e(TAG,"image loading failed ");
-                            return false;
-                        }
 
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            progressBar.setVisibility(View.GONE);
-                            Log.e(TAG,"image loaded in imageView");
-                            return false;
-                        }
-                    })
-                    .into(imageView);
-        }else{
-            progressBar.setVisibility(View.INVISIBLE);
-            Log.e(TAG,"url is a null object"+url);
-        }
+        connect.downloadImage("prof_image","mokshchoudhary2@gmail.com",imageView,view.getContext());
+
+        progressBar.setVisibility(View.GONE);
+
 
 
 
@@ -172,11 +139,11 @@ public class SettingsFragment extends Fragment {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] imageData = baos.toByteArray();
-            connect.uploadImageToStorage("prof_image",connect.getEmail()+"."+"jpeg",imageData);
+            connect.uploadImageToStorage("prof_image",connect.getEmail(),imageData);
         }
         else if(requestCode==SELECT_FILE && resultCode == RESULT_OK && data != null && data.getData() != null){
             Uri selectedImage = data.getData();
-            connect.uploadImageToStorage("prof_image",connect.getEmail()+"."+ "jpeg",selectedImage);
+            connect.uploadImageToStorage("prof_image",connect.getEmail(),selectedImage);
             Glide.with(this).load(selectedImage).into(imageView);
         }
         super.onActivityResult(requestCode, resultCode, data);

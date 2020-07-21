@@ -144,7 +144,7 @@ public class SplashActivity extends AppCompatActivity {
                 if(user!=null) {
                  //Send the Extra With intent
                     startActivity(new Intent(this, UserNameImageActivity.class)
-                            .putExtra("id",user.getProviderId())
+                            .putExtra("id",user.getUid())
                             .putExtra("Email", user.getEmail())
                             .putExtra("name",user.getDisplayName())
                             .putExtra("image",user.getPhotoUrl())

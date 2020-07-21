@@ -81,11 +81,7 @@ public class UserNameImageActivity extends AppCompatActivity {
                     .placeholder(R.drawable.account_pic)
                     .into(imageView);
         else{
-            connect.downloadImage("prof_image",email);
-            Glide.with(getApplicationContext())
-                    .load(connect.downloadImageUri)
-                    .placeholder(R.drawable.account_pic)
-                    .into(imageView);
+            connect.downloadImage("prof_image",email,imageView,this);
         }
 
         progressBar.setVisibility(ProgressBar.INVISIBLE);
@@ -120,7 +116,7 @@ public class UserNameImageActivity extends AppCompatActivity {
         button.setOnClickListener(v -> {
             progressBar.setVisibility(ProgressBar.VISIBLE);
             if(!u_name.getText().toString().isEmpty()){
-                Snackbar.make(findViewById(R.id.ll2),"Welcome!!",Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.ll),"Welcome!!",Snackbar.LENGTH_LONG).show();
 
                 if(dataEnterToDatabase(u_name.getText().toString(),bitmap)){
                     progressBar.setVisibility(ProgressBar.INVISIBLE);
@@ -159,11 +155,11 @@ public class UserNameImageActivity extends AppCompatActivity {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] imagedata = baos.toByteArray();
-            connect.uploadImageToStorage("prof_image",email+"."+"jpeg",imagedata);
+            connect.uploadImageToStorage("prof_image",email,imagedata,this);
         }
         else if(requestCode==SELECT_FILE && resultCode == RESULT_OK && data != null && data.getData() != null){
             Uri selectedImage = data.getData();
-            connect.uploadImageToStorage("prof_image",email+"."+ MimeTypeMap.getFileExtensionFromUrl(String.valueOf(mImageUrl)),selectedImage);
+            connect.uploadImageToStorage("prof_image",email,selectedImage);
             Glide.with(this).load(selectedImage).into(imageView);
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -207,7 +203,7 @@ public class UserNameImageActivity extends AppCompatActivity {
 
             data.setPassword("");
 
-            connect.setName(data);
+            connect.setData(data);
             return true;
         }
 
