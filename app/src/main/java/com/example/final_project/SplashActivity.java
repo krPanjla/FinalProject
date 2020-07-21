@@ -144,11 +144,13 @@ public class SplashActivity extends AppCompatActivity {
                 if(user!=null) {
                  //Send the Extra With intent
                     startActivity(new Intent(this, UserNameImageActivity.class)
+                            .putExtra("id",user.getProviderId())
                             .putExtra("Email", user.getEmail())
                             .putExtra("name",user.getDisplayName())
                             .putExtra("image",user.getPhotoUrl())
                             .putExtra("phone",user.getPhoneNumber())
                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+
                     Toast.makeText(getApplicationContext(), "Your are Logged in " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
                 }
             } else {

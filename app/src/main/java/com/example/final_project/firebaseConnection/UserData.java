@@ -1,6 +1,7 @@
 package com.example.final_project.firebaseConnection;
 
 import android.hardware.usb.UsbDevice;
+import android.net.Uri;
 
 import com.firebase.ui.auth.data.model.User;
 
@@ -9,7 +10,7 @@ public class UserData {
     private String name;
     private int gender;
     private long phone;
-    private byte[] image;
+    private Uri image;
     private String password;
 
     public UserData(){
@@ -45,11 +46,11 @@ public class UserData {
         return id;
     }
 
-    public byte[] getImage() {
+    public Uri getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(Uri image) {
         this.image = image;
     }
 

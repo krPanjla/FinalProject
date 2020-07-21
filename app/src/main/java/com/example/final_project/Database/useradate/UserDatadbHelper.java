@@ -14,6 +14,7 @@ public class UserDatadbHelper extends SQLiteOpenHelper {
 
     public final static String CREATE_LOGIN_USER = "CREATE TABLE "+ BlankContract.BlankEnter.LOGIN_TABLE_NAME+"( " +
             BlankContract.BlankEnter._ID+" TEXT NOT NULL PRIMARY KEY," +
+            BlankContract.BlankEnter.COLUMNS_USER_EMAIL+" TEXT NOT NULL, "+
             BlankContract.BlankEnter.COLUMNS_USER_NAME+" TEXT NOT NULL ,"+
             BlankContract.BlankEnter.COLUMNS_USER_GENDER+" INTEGER ,"+
             BlankContract.BlankEnter.COLUMNS_USER_PHONE+" INTEGER," +

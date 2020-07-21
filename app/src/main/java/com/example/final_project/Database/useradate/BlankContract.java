@@ -13,6 +13,7 @@ public class BlankContract {
         public final static String _ID = BaseColumns._ID;
         public final static String LOGIN_TABLE_NAME = "finalUser_user";
         public final static String COLUMNS_USER_NAME = "name";
+        public final static String COLUMNS_USER_EMAIL = "email";
         public final static String COLUMNS_USER_GENDER = "gender";
         public static final String COLUMNS_USER_PHONE = "phone";
         public final static String COLUMNS_USER_PASSWORD = "password";
