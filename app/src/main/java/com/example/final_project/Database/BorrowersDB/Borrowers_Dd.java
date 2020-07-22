@@ -1,5 +1,6 @@
 package com.example.final_project.Database.BorrowersDB;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -18,7 +19,7 @@ public class Borrowers_Dd extends SQLiteOpenHelper {
 
     public static final String DROP_TABLE = "DROP TABLE IF EXISTS'"+ BlankContact.BlankEnter.BORROWER_TABLE_NAME +"';";
 
-    public Borrowers_Dd(add_borrower context) {
+    public Borrowers_Dd(Context context) {
 
             super(context, BlankContact.BlankEnter.DATABASE_NAME, null,DATABASE_VERSION);
         }

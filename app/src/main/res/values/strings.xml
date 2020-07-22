@@ -20,8 +20,5 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
 
-    <string name="twitter_consumer_key" translatable="false">Twitter key</string>
-    <string name="twitter_consumer_secret" translatable="false">Twitter key</string>
-    <string name="twitter_bearer_token" translatable="false">Twitter key</string>
 
 </resources>
