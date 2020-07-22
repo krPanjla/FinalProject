@@ -3,6 +3,7 @@ package com.example.final_project;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import com.example.final_project.Database.BorrowersDB.BlankContact;
 import com.example.final_project.Database.BorrowersDB.Borrowers_Dd;
 import com.example.final_project.Database.BorrowersDB.Contact;
 import com.example.final_project.Database.useradate.BlankContract;
+import com.example.final_project.ui.home.HomeFragment;
 
 import java.io.ByteArrayOutputStream;
 
@@ -29,7 +31,8 @@ public class add_borrower extends AppCompatActivity {
     private String i,e;
     private float a;
     Contact contact;
-    private final Borrowers_Dd mdbHelper = new Borrowers_Dd(this);
+    private final Borrowers_Dd mdbHelper = new Borrowers_Dd(
+            this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +66,10 @@ public class add_borrower extends AppCompatActivity {
                  //#Pro line Bro :) :)
                  Toast.makeText(add_borrower.this, "pehli fursat m nikal", Toast.LENGTH_SHORT).show();
               s();
+              Intent intent=new Intent(add_borrower.this, HomeFragment.class);
+              startActivity(intent);
           }
+
       });
 
 
