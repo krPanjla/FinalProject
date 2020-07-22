@@ -21,6 +21,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.example.final_project.Database.useradate.UserDatadbProvider;
 import com.example.final_project.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -68,7 +69,7 @@ public class ConnectionFireBase {
     }
 
     public void setData(UserData data){
-        myRef.child("member");
+        myRef.child("/member");
         myRef.push().setValue(data);
         Log.e(TAG,"Data Set to database");
     }
@@ -179,7 +180,7 @@ public class ConnectionFireBase {
      * @param location ,where image has to be stored in the database
      * @param imageName name of the image
      * */
-    public void downloadImage(String location, String imageName, ImageView imageView, Context context) {
+    public void downloadProfileImage(String location, String imageName, ImageView imageView, Context context) {
         StorageReference riversRef = mStorageRef.child(location+"/"+imageName);
         ProgressDialog n = new ProgressDialog(context);
         n.setTitle("Loading");

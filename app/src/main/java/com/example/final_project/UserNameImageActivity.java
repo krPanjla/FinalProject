@@ -81,7 +81,7 @@ public class UserNameImageActivity extends AppCompatActivity {
                     .placeholder(R.drawable.account_pic)
                     .into(imageView);
         else{
-            connect.downloadImage("prof_image",email,imageView,this);
+            connect.downloadProfileImage("prof_image",email,imageView,this);
         }
 
         progressBar.setVisibility(ProgressBar.INVISIBLE);
@@ -170,7 +170,7 @@ public class UserNameImageActivity extends AppCompatActivity {
         ContentValues values = new ContentValues();
         try {
             sqLiteDatabase = mdbHelper.getWritableDatabase();
-            Log.e(TAG,""+getIntent().getStringExtra("phone")+" "+getIntent().getStringExtra("email"));
+            Log.e(TAG,u_name.getText().toString()+" "+getIntent().getStringExtra("phone")+" "+getIntent().getStringExtra("id"));
             values.put(BlankContract.BlankEnter._ID ,getIntent().getStringExtra("id"));
             values.put(BlankContract.BlankEnter.COLUMNS_USER_EMAIL,email);
             values.put(BlankContract.BlankEnter.COLUMNS_USER_NAME,u_name.getText().toString());

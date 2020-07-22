@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.final_project.Database.useradate.UserDatadbProvider;
 import com.example.final_project.add_borrower;
 import com.example.final_project.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -24,13 +25,9 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home,container,false);
 
         floatingActionButton = view.findViewById(R.id.add_person);
-
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), add_borrower.class);
-                startActivity(intent);
-            }
+        floatingActionButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), add_borrower.class);
+            startActivity(intent);
         });
 
         return view;

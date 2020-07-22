@@ -19,7 +19,7 @@ public class UserDatadbHelper extends SQLiteOpenHelper {
             BlankContract.BlankEnter.COLUMNS_USER_GENDER+" INTEGER ,"+
             BlankContract.BlankEnter.COLUMNS_USER_PHONE+" INTEGER," +
             BlankContract.BlankEnter.COLUMNS_USER_PASSWORD+" PASSWORD ,"+
-            BlankContract.BlankEnter.COLUMNS_USER_IMAGE+"BLOB "+
+            BlankContract.BlankEnter.COLUMNS_USER_IMAGE+" Text "+
             ");";
 
     public static final int USERDATA_TABLE_VERSION = 1;

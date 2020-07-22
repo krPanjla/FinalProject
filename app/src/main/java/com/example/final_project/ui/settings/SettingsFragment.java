@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.final_project.Database.useradate.UserDatadbHelper;
+import com.example.final_project.Database.useradate.UserDatadbProvider;
 import com.example.final_project.R;
 import com.example.final_project.firebaseConnection.ConnectionFireBase;
 import com.firebase.ui.auth.AuthUI;
@@ -39,9 +40,11 @@ public class SettingsFragment extends Fragment {
     private ImageView imageView;
     private ConnectionFireBase connect;
     private Bitmap bitmap;
+    private TextView name;
     private ProgressBar progressBar;
     static final int REQUEST_IMAGE_CAPTURE=1;
     static final int SELECT_FILE=0;
+    private UserDatadbProvider provider;
     public SettingsFragment(AppCompatActivity activity){
         This = activity;
     }
@@ -49,14 +52,17 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view =  inflater.inflate(R.layout.fragment_settings, container, false);
+        provider = new UserDatadbProvider(view.getContext());
         connect = new ConnectionFireBase();
+        name = view.findViewById(R.id.name);
         imageView = view.findViewById(R.id.prof_image);
         progressBar = view.findViewById(R.id.progressbar2);
 
+        name.setText(provider.getName());
 
         progressBar.setVisibility(ProgressBar.VISIBLE);
 
-        connect.downloadImage("prof_image","mokshchoudhary2@gmail.com",imageView,view.getContext());
+        connect.downloadProfileImage("prof_image",provider.getEmail(),imageView,view.getContext());
 
         progressBar.setVisibility(View.GONE);
 
@@ -139,12 +145,11 @@ public class SettingsFragment extends Fragment {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] imageData = baos.toByteArray();
-            connect.uploadImageToStorage("prof_image",connect.getEmail(),imageData);
+            connect.uploadImageToStorage("prof_image",provider.getEmail(),imageData);
         }
         else if(requestCode==SELECT_FILE && resultCode == RESULT_OK && data != null && data.getData() != null){
             Uri selectedImage = data.getData();
-            connect.uploadImageToStorage("prof_image",connect.getEmail(),selectedImage);
-            Glide.with(this).load(selectedImage).into(imageView);
+            connect.uploadImageToStorage("prof_image",provider.getEmail(),selectedImage);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

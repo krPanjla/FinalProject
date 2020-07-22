@@ -61,6 +61,10 @@ dependencies {
     //Adding indefined progress bar ui dependency
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 
+    //Adding dependency for CardView
+
+    implementation "androidx.cardview:cardview:1.0.0"
+
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'

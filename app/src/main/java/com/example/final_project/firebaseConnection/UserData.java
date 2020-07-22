@@ -5,6 +5,8 @@ import android.net.Uri;
 
 import com.firebase.ui.auth.data.model.User;
 
+import java.util.ArrayList;
+
 public class UserData {
     private String id;
     private String name;
@@ -12,6 +14,7 @@ public class UserData {
     private long phone;
     private Uri image;
     private String password;
+    private ArrayList<String> notification = new ArrayList<>();
 
     public UserData(){
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -68,5 +71,9 @@ public class UserData {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setNotification(ArrayList<String> notification) {
+        this.notification = notification;
     }
 }
