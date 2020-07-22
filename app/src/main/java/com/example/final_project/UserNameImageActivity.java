@@ -203,7 +203,7 @@ public class UserNameImageActivity extends AppCompatActivity {
 
             data.setPassword("");
 
-            connect.setData(data);
+            connect.setData(data,email);
             return true;
         }
 

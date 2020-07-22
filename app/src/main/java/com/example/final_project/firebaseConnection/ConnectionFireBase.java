@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -36,6 +37,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
 
 import static android.content.ContentValues.TAG;
@@ -48,28 +50,17 @@ public class ConnectionFireBase {
     public Uri downloadImageUri;
     public ConnectionFireBase(){
         database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("user_prof");
+        myRef = database.getReference();
         mStorageRef = FirebaseStorage.getInstance().getReference();
-
-        /*myRef.setValue("This is root node value").addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-
-                if(task.isSuccessful()){
-                    //Task was successful, data written!
-                    Log.e(TAG, "Data Saved" + Objects.requireNonNull(task.getException()).getLocalizedMessage() );
-
-                }else{
-                    //Log the error message
-                    Log.e(TAG, "onComplete: ERROR: " + task.getException().getLocalizedMessage() );
-                }
-
-            }
-        });*/
     }
 
-    public void setData(UserData data){
-        myRef.child("/member");
+    public void setData(UserData data,String username){
+        StringBuilder l= new StringBuilder();
+        for(int i =0 ; i<username.length() ; i++){
+            if(username.charAt(i)!='.' && username.charAt(i)!='#' && username.charAt(i)!='$' && username.charAt(i)!='[' && username.charAt(i)!=']')
+                l.append(username.charAt(i));
+        }
+        myRef = database.getReference("user_prof/member/"+l);
         myRef.push().setValue(data);
         Log.e(TAG,"Data Set to database");
     }
@@ -113,24 +104,25 @@ public class ConnectionFireBase {
     }
 
     public void uploadImageToStorage(String location, String imageName, byte[] imageUrl, AppCompatActivity view){
-        Log.e(TAG,location+" "+imageName+" "+imageUrl);
-        ProgressBar n = new ProgressBar(view.getApplication());
+        Log.e(TAG,location+" "+imageName+" "+ Arrays.toString(imageUrl));
+        ProgressDialog n = new ProgressDialog(view.getApplicationContext());
         StorageReference riversRef = mStorageRef.child(location+"/"+imageName);
         if(imageUrl != null)
             riversRef.putBytes(imageUrl)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        // Get a URL to the uploaded content
-                        downloadImageUri = taskSnapshot.getUploadSessionUri();
-                        Log.e(TAG,"image uploaded");
-                    })
-                    .addOnFailureListener(exception -> {
-                        Log.e(TAG,"Cant upload file");
-                        downloadImageUri = null;
-                    }).addOnProgressListener(view, taskSnapshot -> {
-                n.setVisibility(View.VISIBLE);
-                int progress = (int) (100.0 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
-                n.setProgress(progress);
-            });
+                .addOnSuccessListener(taskSnapshot -> {
+                    // Get a URL to the uploaded content
+                    downloadImageUri = taskSnapshot.getUploadSessionUri();
+                    Log.e(TAG,"image uploaded");
+                    n.dismiss();
+                })
+                .addOnFailureListener(exception -> {
+                    Log.e(TAG,"Cant upload file");
+                    downloadImageUri = null;
+                }).addOnProgressListener(view, taskSnapshot -> {
+                    n.show();
+                    int progress = (int) (100.0 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                    n.setProgress(progress);
+                });
         else{
             Log.e(TAG,"Url is empty");
         }
@@ -160,14 +152,13 @@ public class ConnectionFireBase {
      * @param location ,where image has to be stored in the database
      * @param imageName name of the image
      * */
-    public void downloadImage(String location, String imageName) {
+    public void downloadProfileImage(String location, String imageName) {
         StorageReference riversRef = mStorageRef.child(location+"/"+imageName);
         riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()  {
             // Got the download URL for 'users/me/profile.png'
             @Override
             public void onSuccess(Uri uri) {
                 downloadImageUri = uri;
-
                 Log.e(TAG, "download image url : " + downloadImageUri.toString()+"\n path : "+uri.getPath()+"\n LPS : "+uri.getLastPathSegment());
                 }
         }).addOnFailureListener(exception -> {
@@ -207,33 +198,36 @@ public class ConnectionFireBase {
                             }
                         })
                         .into(imageView);
-               /* Log.e(TAG, "download image url : " + Objects.requireNonNull(downloadImageUri.toString())+
-                        "\n path : " + Objects.requireNonNull(uri.getPath())+
-                        "\n LPS : " + Objects.requireNonNull(uri.getLastPathSegment()));*/
                 }
         }).addOnFailureListener(exception -> {
             Log.e(TAG,"Can't able to find the photo");
         });
     }
 
-    public String getEmail(){
-        final String[] value = new String[1];
-        myRef.addValueEventListener(new ValueEventListener() {
+    /**
+     * <p>return the url od the image of given location,name</p>
+     * @param location ,where image has to be stored in the database
+     * @param string name of the image
+     * */
+    public void getString(String location, String string,Context context) {
+        myRef.child(location);
+        ProgressDialog d = new ProgressDialog(context);
+        d.setTitle("Loading");
+        d.setMessage("Loading text ...");
+        d.show();
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                value[0] = dataSnapshot.getValue(String.class);
-                Log.d(TAG, "Value is: " + value[0]);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.e(TAG,""+snapshot.getChildrenCount());
+                Log.e(TAG,""+snapshot.getValue());
+                d.dismiss();
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+            public void onCancelled(@NonNull DatabaseError error) {
+                d.dismiss();
             }
         });
-        return value[0];
     }
 
 }

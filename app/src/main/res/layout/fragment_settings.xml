@@ -98,7 +98,6 @@
                 android:id="@+id/signout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:text="@string/action_sign_out"
                 android:textColor="#000"
                 android:textSize="18sp" />
