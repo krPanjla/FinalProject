@@ -97,39 +97,24 @@ public class SettingsFragment extends Fragment {
         });
 
         sign_out = view.findViewById(R.id.signout);
-        sign_out.setOnClickListener(v -> AuthUI.getInstance()
-                .signOut(container.getContext())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-                        new AlertDialog.Builder(getActivity())
-                                .setPositiveButton("Yes", (dialog, which) ->{
-                                    SQLiteDatabase sqLiteDatabase = new UserDatadbHelper(getContext()).getWritableDatabase();
-                                    sqLiteDatabase.execSQL(UserDatadbHelper.DROP_LOGIN_TABLE);
-                                    sqLiteDatabase.execSQL(UserDatadbHelper.CREATE_LOGIN_USER);
-                                    This.finish();
-                                }).setNegativeButton("No",(dialog, which) -> {
-
-                        }).setTitle("Alert")
-                        .setMessage("Do you want to sign out?").show();
-
-                       /* Snackbar.make(view,"Delete all user info from device?",Snackbar.LENGTH_INDEFINITE)
-                               .setAction("no", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
+        sign_out.setOnClickListener(v ->{
+            new AlertDialog.Builder(getActivity())
+                    .setPositiveButton("Yes", (dialog, which) ->{
+                        AuthUI.getInstance()
+                                .signOut(container.getContext())
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        SQLiteDatabase sqLiteDatabase = new UserDatadbHelper(getContext()).getWritableDatabase();
+                                        sqLiteDatabase.execSQL(UserDatadbHelper.DROP_LOGIN_TABLE);
+                                        sqLiteDatabase.execSQL(UserDatadbHelper.CREATE_LOGIN_USER);
                                         This.finish();
                                     }
-                                })
-                                .setAction("yes", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                SQLiteDatabase sqLiteDatabase = new UserDatadbHelper(getContext()).getWritableDatabase();
-                                sqLiteDatabase.execSQL(UserDatadbHelper.DROP_LOGIN_TABLE);
-                                sqLiteDatabase.execSQL(UserDatadbHelper.CREATE_LOGIN_USER);
-                                This.finish();
-                            }
-                        }).show();*/
-                    }
-                }));
+                                });
+                    }).setNegativeButton("No",(dialog, which) -> {
+
+            }).setTitle("Alert")
+                    .setMessage("Do you want to sign out?").show();
+        });
         // Inflate the layout for this fragment
         return view;
     }
