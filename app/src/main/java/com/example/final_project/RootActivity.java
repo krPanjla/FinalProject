@@ -1,16 +1,19 @@
 package com.example.final_project;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.example.final_project.Database.useradate.UserDatadbHelper;
 import com.example.final_project.ui.customNotificationBox.CustomNotificationView;
 import com.example.final_project.ui.home.HomeFragment;
 import com.example.final_project.ui.payments.PaymentsFragment;

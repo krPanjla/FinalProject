@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -36,7 +37,7 @@ public class SettingsFragment extends Fragment {
 
     private static final String TAG = "SettingFragment";
     private AppCompatActivity This;
-    private TextView sign_out;
+    private LinearLayout sign_out;
     private ImageView imageView;
     private ConnectionFireBase connect;
     private Bitmap bitmap;
@@ -107,9 +108,9 @@ public class SettingsFragment extends Fragment {
                                     sqLiteDatabase.execSQL(UserDatadbHelper.CREATE_LOGIN_USER);
                                     This.finish();
                                 }).setNegativeButton("No",(dialog, which) -> {
-                                    This.finish();
+
                         }).setTitle("Alert")
-                        .setMessage("Delete all user info from device?").show();
+                        .setMessage("Do you want to sign out?").show();
 
                        /* Snackbar.make(view,"Delete all user info from device?",Snackbar.LENGTH_INDEFINITE)
                                .setAction("no", new View.OnClickListener() {

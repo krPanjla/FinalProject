@@ -7,11 +7,12 @@
     <string name="twitter_consumer_key" translatable="false">Twitter key</string>
     <string name="twitter_consumer_secret" translatable="false">Twitter key</string>
     <string name="twitter_bearer_token" translatable="false">twitter key</string>
+    <string name="font">sans-serif</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_due_pament">Due Payment</string>
-    <string name="title_setting">Setting</string>
+    <string name="title_notification">Notification</string>
     <string name="title_home">Home</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
@@ -19,6 +20,9 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="account">Account</string>
+    <string name="data_and_usage">Data and Usage</string>
+    <string name="importent">Importent</string>
 
 
 </resources>

@@ -204,6 +204,41 @@ public class ConnectionFireBase {
         });
     }
 
+ /**
+     * <p>return the url od the image of given location,name</p>
+     * @param location ,where image has to be stored in the database
+     * @param imageName name of the image
+     * */
+    public void downloadProfileImage(String location, String imageName, ImageView imageView, Context context,ProgressBar progressBar) {
+        StorageReference riversRef = mStorageRef.child(location+"/"+imageName);
+        progressBar.setVisibility(View.VISIBLE);
+        riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()  {
+            // Got the download URL for 'users/me/profile.png'
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(context.getApplicationContext())
+                        .load(uri)
+                        .placeholder(R.drawable.account_pic)
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                progressBar.setVisibility(View.INVISIBLE);
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                progressBar.setVisibility(View.INVISIBLE);
+                                return false;
+                            }
+                        })
+                        .into(imageView);
+                }
+        }).addOnFailureListener(exception -> {
+            Log.e(TAG,"Can't able to find the photo");
+        });
+    }
+
     /**
      * <p>return the url od the image of given location,name</p>
      * @param location ,where image has to be stored in the database
