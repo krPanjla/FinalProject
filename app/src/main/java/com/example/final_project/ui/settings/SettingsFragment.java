@@ -30,6 +30,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -61,15 +62,7 @@ public class SettingsFragment extends Fragment {
 
         name.setText(provider.getName());
 
-        progressBar.setVisibility(ProgressBar.VISIBLE);
-
-        connect.downloadProfileImage("prof_image",provider.getEmail(),imageView,view.getContext());
-
-        progressBar.setVisibility(View.GONE);
-
-
-
-
+        connect.downloadProfileImage("prof_image",provider.getEmail(),imageView,view.getContext(),progressBar);
 
         imageView.setOnClickListener(v -> {
 
@@ -98,17 +91,15 @@ public class SettingsFragment extends Fragment {
 
         sign_out = view.findViewById(R.id.signout);
         sign_out.setOnClickListener(v ->{
-            new AlertDialog.Builder(getActivity())
+            new AlertDialog.Builder(requireActivity())
                     .setPositiveButton("Yes", (dialog, which) ->{
                         AuthUI.getInstance()
                                 .signOut(container.getContext())
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        SQLiteDatabase sqLiteDatabase = new UserDatadbHelper(getContext()).getWritableDatabase();
-                                        sqLiteDatabase.execSQL(UserDatadbHelper.DROP_LOGIN_TABLE);
-                                        sqLiteDatabase.execSQL(UserDatadbHelper.CREATE_LOGIN_USER);
-                                        This.finish();
-                                    }
+                                .addOnCompleteListener(task -> {
+                                    SQLiteDatabase sqLiteDatabase = new UserDatadbHelper(getContext()).getWritableDatabase();
+                                    sqLiteDatabase.execSQL(UserDatadbHelper.DROP_LOGIN_TABLE);
+                                    sqLiteDatabase.execSQL(UserDatadbHelper.CREATE_LOGIN_USER);
+                                    This.finish();
                                 });
                     }).setNegativeButton("No",(dialog, which) -> {
 
@@ -135,7 +126,7 @@ public class SettingsFragment extends Fragment {
         }
         else if(requestCode==SELECT_FILE && resultCode == RESULT_OK && data != null && data.getData() != null){
             Uri selectedImage = data.getData();
-            connect.uploadImageToStorage("prof_image",provider.getEmail(),selectedImage);
+            connect.uploadImageToStorage("prof_image",provider.getEmail(),selectedImage,This);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

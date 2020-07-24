@@ -31,12 +31,12 @@ import static android.content.ContentValues.TAG;
 public class NotificationAdapter extends ArrayAdapter<NotificationData> {
 
     private Context mContext;
-    private List<NotificationData> notificationDataList = new ArrayList<>();
+    private List<NotificationData> notificationDataList;
 
     /**
      * Constructor
      *
-     * @param context            The current context.
+     * @param context The current context.
      */
     public NotificationAdapter(@NonNull Context context, @SuppressLint("SupportAnnotationUsage") @LayoutRes ArrayList<NotificationData> list) {
         super(context,0,list);
@@ -55,7 +55,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationData> {
 
         NotificationData currentNotification = notificationDataList.get(position);
 
-        ImageView image = (ImageView)listItem.findViewById(R.id.notification_image);
+        ImageView image = listItem.findViewById(R.id.notification_image);
         Glide.with(mContext)
                 .load(currentNotification.getImageUrl())
                 .listener(new RequestListener<Drawable>() {
@@ -72,34 +72,28 @@ public class NotificationAdapter extends ArrayAdapter<NotificationData> {
                 })
         .into(image);
 
-        TextView name = (TextView) listItem.findViewById(R.id.nof_name);
+        TextView name = listItem.findViewById(R.id.nof_name);
         name.setText(currentNotification.getName());
         Log.e(TAG,"Name loaded");
 
 
-        TextView date = (TextView) listItem.findViewById(R.id.nof_date);
+        TextView date = listItem.findViewById(R.id.nof_date);
         date.setText(currentNotification.getData());
         Log.e(TAG,"date loaded");
-        
-        TextView amount = (TextView) listItem.findViewById(R.id.nof_amount);
+
+        TextView amount =  listItem.findViewById(R.id.nof_amount);
         amount.setText("Amount : "+currentNotification.getAmount());
         Log.e(TAG,"Amount loaded");
-        
+
         Button accpect = listItem.findViewById(R.id.buttonA);
-        accpect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                
-            }
+        accpect.setOnClickListener(v -> {
+
         });
         Log.e(TAG,"get buttonA");
-        
+
         Button dinied = listItem.findViewById(R.id.buttonD);
-        dinied.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                
-            }
+        dinied.setOnClickListener(v -> {
+
         });
         Log.e(TAG,"get buttonD");
         return listItem;

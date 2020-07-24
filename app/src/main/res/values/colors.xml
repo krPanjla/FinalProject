@@ -8,4 +8,5 @@
     <color name="text">#000</color>
     <color name="setting_layout_background">#FFFFFF</color>
     <color name="setting_background">#DFDFDF</color>
+    <color name="green">#0CCF13</color>
 </resources>
