@@ -12,7 +12,7 @@ public class UserData {
     private String name;
     private int gender;
     private long phone;
-    private Uri image;
+    private String image;
     private String password;
     private ArrayList<String> notification = new ArrayList<>();
 
@@ -49,11 +49,11 @@ public class UserData {
         return id;
     }
 
-    public Uri getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Uri image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

@@ -70,7 +70,6 @@ public class SplashActivity extends AppCompatActivity {
         //Animation for splash text
         Animation animationUtils = AnimationUtils.loadAnimation(this,R.anim.anim);
 
-
         /**@Decleartion provides, Here we are going to make permissions of Email,Phone and Gmail.
          * @Initialize , The mFirebaseAuth.
          * **/

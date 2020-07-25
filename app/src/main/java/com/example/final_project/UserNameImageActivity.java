@@ -191,14 +191,12 @@ public class UserNameImageActivity extends AppCompatActivity {
         Log.e(TAG,result+"");
         if(result != -1){
             data.setId(email);
-
             data.setName(u_name.getText().toString().trim());
-
             if(getIntent().getStringExtra("phone") != null) data.setPhone(Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("phone"))));
 
             //Image data set at the time of selection
             if(connect.downloadImageUri != null){
-                data.setImage(mImageUrl);
+                data.setImage(connect.downloadImageUri+"");
             }
 
             data.setPassword("");

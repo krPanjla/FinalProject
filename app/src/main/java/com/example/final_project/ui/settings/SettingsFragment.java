@@ -126,7 +126,7 @@ public class SettingsFragment extends Fragment {
         }
         else if(requestCode==SELECT_FILE && resultCode == RESULT_OK && data != null && data.getData() != null){
             Uri selectedImage = data.getData();
-            connect.uploadImageToStorage("prof_image",provider.getEmail(),selectedImage,This);
+            connect.uploadImageToStorage("prof_image",provider.getEmail(),selectedImage,getActivity(),imageView);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
