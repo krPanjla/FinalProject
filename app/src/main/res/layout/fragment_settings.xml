@@ -308,21 +308,21 @@
                 android:layout_gravity="center"
                 android:textSize="14dp"
                 android:layout_marginTop="30dp"
-                android:text="         by \n Future Work\n       with ❤"/>
+                android:text="         by \n Future Work\n      with ❤"/>
 
         </LinearLayout>
 
         <com.github.ybq.android.spinkit.SpinKitView
             android:id="@+id/progressbar2"
             style="@style/SpinKitView.Large.ChasingDots"
-            android:layout_width="120dp"
-            android:layout_height="129dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_gravity="center"
             app:SpinKit_Color="@color/colorAccent"
-            app:layout_constraintBottom_toBottomOf="@+id/ll1"
-            app:layout_constraintEnd_toEndOf="@+id/ll1"
-            app:layout_constraintStart_toStartOf="@+id/ll1"
-            app:layout_constraintTop_toTopOf="@+id/ll1" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

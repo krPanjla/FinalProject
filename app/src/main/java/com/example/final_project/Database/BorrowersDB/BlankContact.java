@@ -13,7 +13,9 @@ public class BlankContact {
         public final static String BORROWER_TABLE_NAME = "borrower";
 
         public final static String _ID = BaseColumns._ID;
+        public final static String COLUMNS_BORROWER_NAME = "name";
         public final static String COLUMNS_BORROWER_AMOUNT = "amount";
         public final static String COLUMNS_BORROWER_DATE = "date";
+        public final static String COLUMNS_BORROWER_FLAG = "flag";
     }
 }

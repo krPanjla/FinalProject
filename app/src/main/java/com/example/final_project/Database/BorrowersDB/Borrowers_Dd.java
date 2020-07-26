@@ -12,15 +12,15 @@ public class Borrowers_Dd extends SQLiteOpenHelper {
 
 
     public static final String CREATE_TABLE = "CREATE TABLE "+BlankContact.BlankEnter.BORROWER_TABLE_NAME+"("+
-            BlankContact.BlankEnter._ID + " TEXT NOT NULL PRIMARY KEY, "+
+            BlankContact.BlankEnter.COLUMNS_BORROWER_NAME + " TEXT NOT NULL, "+
             BlankContact.BlankEnter.COLUMNS_BORROWER_DATE+" TEXT,"+
+            BlankContact.BlankEnter.COLUMNS_BORROWER_FLAG+" TEXT NOT NULL ,"+
             /*RAEL is use to store the floating point number in the sqlite database*/
             BlankContact.BlankEnter.COLUMNS_BORROWER_AMOUNT +" REAL NOT NULL) ;";
 
     public static final String DROP_TABLE = "DROP TABLE IF EXISTS'"+ BlankContact.BlankEnter.BORROWER_TABLE_NAME +"';";
 
     public Borrowers_Dd(Context context) {
-
             super(context, BlankContact.BlankEnter.DATABASE_NAME, null,DATABASE_VERSION);
         }
          @Override

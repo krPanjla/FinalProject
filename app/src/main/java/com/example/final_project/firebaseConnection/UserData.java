@@ -9,12 +9,12 @@ import java.util.ArrayList;
 
 public class UserData {
     private String id;
+    private String email;
     private String name;
     private int gender;
     private long phone;
     private String image;
     private String password;
-    private ArrayList<String> notification = new ArrayList<>();
 
     public UserData(){
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -23,6 +23,14 @@ public class UserData {
     public UserData(String id,String name){
         this.id = id;
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public int getGender() {
@@ -73,7 +81,4 @@ public class UserData {
         this.password = password;
     }
 
-    public void setNotification(ArrayList<String> notification) {
-        this.notification = notification;
-    }
 }

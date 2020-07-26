@@ -24,6 +24,7 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
+import com.example.final_project.Database.BorrowersDB.Borrowers_Dd;
 import com.example.final_project.Database.useradate.BlankContract;
 import com.example.final_project.Database.useradate.UserDatadbHelper;
 import com.example.final_project.firebaseConnection.ConnectionFireBase;
@@ -33,6 +34,8 @@ import com.google.android.material.snackbar.Snackbar;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Objects;
+
+import static android.content.ContentValues.TAG;
 
 public class UserNameImageActivity extends AppCompatActivity {
 
@@ -54,6 +57,7 @@ public class UserNameImageActivity extends AppCompatActivity {
     private  ConnectionFireBase connect;
     private  UserData data;
     private ProgressBar progressBar;
+    private final Borrowers_Dd mmdbHelper = new Borrowers_Dd(this);
     private final com.example.final_project.Database.useradate.UserDatadbHelper mdbHelper = new UserDatadbHelper(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,23 +185,27 @@ public class UserNameImageActivity extends AppCompatActivity {
                 image.compress(Bitmap.CompressFormat.JPEG,100,stream);
                 byte[] imageFile = stream.toByteArray();
                 values.put(BlankContract.BlankEnter.COLUMNS_USER_IMAGE,imageFile);
-            }
+            }else if(connect.downloadImageUri != null){
+                values.put(BlankContract.BlankEnter.COLUMNS_USER_IMAGE,connect.downloadImageUri+"");
+            }else
+                values.put(BlankContract.BlankEnter.COLUMNS_USER_IMAGE,"");
 
         }catch(Exception ignored){
-
+            Log.e(TAG,"@ "+ignored);
         }
         long result = -1;
         if(sqLiteDatabase != null) result = sqLiteDatabase.insert(BlankContract.BlankEnter.LOGIN_TABLE_NAME, BlankContract.BlankEnter._ID,values);
         Log.e(TAG,result+"");
         if(result != -1){
-            data.setId(email);
+            data.setId(getIntent().getStringExtra("id"));
+            data.setEmail(email);
             data.setName(u_name.getText().toString().trim());
             if(getIntent().getStringExtra("phone") != null) data.setPhone(Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("phone"))));
 
             //Image data set at the time of selection
             if(connect.downloadImageUri != null){
                 data.setImage(connect.downloadImageUri+"");
-            }
+            }else data.setImage("");
 
             data.setPassword("");
 

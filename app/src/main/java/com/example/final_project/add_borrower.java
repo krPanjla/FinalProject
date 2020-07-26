@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,23 +14,18 @@ import android.widget.Toast;
 
 import com.example.final_project.Database.BorrowersDB.BlankContact;
 import com.example.final_project.Database.BorrowersDB.Borrowers_Dd;
-import com.example.final_project.Database.BorrowersDB.Contact;
-import com.example.final_project.Database.useradate.BlankContract;
+import com.example.final_project.Database.BorrowersDB.DataContact;
+import com.example.final_project.firebaseConnection.ConnectionFireBase;
 import com.example.final_project.ui.home.HomeFragment;
 
-import java.io.ByteArrayOutputStream;
-
 import static android.content.ContentValues.TAG;
-import static java.sql.Types.FLOAT;
 
 public class add_borrower extends AppCompatActivity {
     EditText id,email,amount;
     Button done;
     private String i,e;
     private float a;
-    Contact contact;
-    private final Borrowers_Dd mdbHelper = new Borrowers_Dd(
-            this);
+    private final Borrowers_Dd mdbHelper = new Borrowers_Dd(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,47 +36,36 @@ public class add_borrower extends AppCompatActivity {
         amount=findViewById(R.id.enter_amount);
         done=findViewById(R.id.button_done);
 
-        done.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
+        done.setOnClickListener(v -> {
 
-              if(id.getText().toString().isEmpty() && amount.getText().toString().isEmpty() || email.getText().toString().isEmpty()  ) {
-                  //fetching values from edit texts
-                  i = id.getText().toString().trim();
-                  e = email.getText().toString().trim();
-                  a = Float.parseFloat(amount.getText().toString().trim());
+            if(!id.getText().toString().trim().isEmpty() && !amount.getText().toString().trim().isEmpty() || !email.getText().toString().trim().isEmpty()  ) {
+                //fetching values from edit texts
+                Log.e(TAG,"data check ok in add_borrower");
+                i = id.getText().toString().trim();
+                e = email.getText().toString().trim();
+                a = Float.parseFloat(amount.getText().toString().trim());
 
+                //save dataContact is a method in database class which inserts the values to the table
 
-                  //save contact is a method in database class which inserts the values to the table
+                boolean rowCount = saveContact();
 
-                  boolean rowCount = saveContact();
+            if(rowCount) {
+                Toast.makeText(add_borrower.this, "inserted", Toast.LENGTH_SHORT).show();
+            }
 
-              if(rowCount) {
-                  Toast.makeText(add_borrower.this, "inserted", Toast.LENGTH_SHORT).show();
-              }
+            else
+               //#Pro line Bro :) :)
+               Toast.makeText(add_borrower.this, "pehli fursat m nikal", Toast.LENGTH_SHORT).show();
+            add_borrower.this.finishActivity(0);
+            add_borrower.this.finish();
+            }else{
+                if(amount.getText().toString().trim().isEmpty())
+                    Toast.makeText(getApplicationContext(),"You can't left amount empty",Toast.LENGTH_SHORT).show();
 
-              else
-                 //#Pro line Bro :) :)
-                 Toast.makeText(add_borrower.this, "pehli fursat m nikal", Toast.LENGTH_SHORT).show();
-              s();
-              Intent intent=new Intent(add_borrower.this, HomeFragment.class);
-              startActivity(intent);
-                  if (rowCount) {
-                      Toast.makeText(add_borrower.this, "inserted", Toast.LENGTH_SHORT).show();
-                  } else
-                      //#Pro line Bro :) :)
-                      Toast.makeText(add_borrower.this, "pehli fursat m nikal", Toast.LENGTH_SHORT).show();
-                  s();
-              }else{
-                  if(amount.getText().toString().trim().isEmpty())
-                      Toast.makeText(getApplicationContext(),"You can't left amount empty",Toast.LENGTH_SHORT).show();
-
-                  if(id.getText().toString().trim().isEmpty())
-                      Toast.makeText(getApplicationContext(),"You can't left id empty",Toast.LENGTH_SHORT).show();
-              }
-          }
-
-      });
+                if(id.getText().toString().trim().isEmpty())
+                    Toast.makeText(getApplicationContext(),"You can't left id empty",Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
     }
@@ -95,21 +77,30 @@ public class add_borrower extends AppCompatActivity {
         ContentValues values = new ContentValues();
         try {
             sqLiteDatabase = mdbHelper.getWritableDatabase();
-            values.put(BlankContact.BlankEnter._ID,i);
+            values.put(BlankContact.BlankEnter.COLUMNS_BORROWER_NAME,i);
             values.put(BlankContact.BlankEnter.COLUMNS_BORROWER_DATE,e);
+            values.put(BlankContact.BlankEnter.COLUMNS_BORROWER_FLAG,Boolean.FALSE);
             values.put(BlankContact.BlankEnter.COLUMNS_BORROWER_AMOUNT,a);
             Log.e(TAG,i+"  "+e+"  "+a);
         }catch(Exception ignored){
-
+            Log.e(TAG,"In side Exception "+ignored);
         }
         long result = -1;
-        if(sqLiteDatabase != null) result = sqLiteDatabase.insert(BlankContact.BlankEnter.BORROWER_TABLE_NAME, BlankContact.BlankEnter._ID,values);
-        Log.e(TAG,result+"");
+        if(sqLiteDatabase != null) result = sqLiteDatabase.insert(BlankContact.BlankEnter.BORROWER_TABLE_NAME, null,values);
+        Log.e(TAG,result+"@");
+        if(result != -1){
+            ConnectionFireBase connectionFireBase = new ConnectionFireBase();
+            DataContact contact = new DataContact(getApplicationContext());
+            contact.setId(i);
+            contact.setDate(e);
+            contact.setAmount(a);
+            contact.setImageUrl("prof+image/"+i);
+            contact.setPayed(Boolean.FALSE+"");
+            connectionFireBase.pushNotification(contact,i);
+
+        }
         return result != -1;
 
     }
 
-    private void s(){
-        this.finishActivity(0);
-    }
 }

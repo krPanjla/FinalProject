@@ -21,6 +21,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.example.final_project.Database.BorrowersDB.DataContact;
 import com.example.final_project.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -38,7 +39,7 @@ import static android.content.ContentValues.TAG;
 public class ConnectionFireBase {
 
     private FirebaseDatabase database;
-    public DatabaseReference myRef;
+    private DatabaseReference myRef;
     private StorageReference mStorageRef;
     public Uri downloadImageUri;
     public ConnectionFireBase(){
@@ -47,18 +48,18 @@ public class ConnectionFireBase {
         mStorageRef = FirebaseStorage.getInstance().getReference();
     }
 
-    public void setData(UserData data,String username){
+    public void setData(UserData data,String userEmail){
         StringBuilder l= new StringBuilder();
-        for(int i =0 ; i<username.length() ; i++){
-            if(username.charAt(i)!='.' && username.charAt(i)!='#' && username.charAt(i)!='$' && username.charAt(i)!='[' && username.charAt(i)!=']')
-                l.append(username.charAt(i));
+        for(int i =0 ; i<userEmail.length() ; i++){
+            if(userEmail.charAt(i)!='.' && userEmail.charAt(i)!='#' && userEmail.charAt(i)!='$' && userEmail.charAt(i)!='[' && userEmail.charAt(i)!=']')
+                l.append(userEmail.charAt(i));
         }
         myRef = database.getReference("Member/"+l+"/UserProfile/");
         myRef.push().setValue(data);
         Log.e(TAG,"Data Set to database");
     }
 
-    public void pushNotification(UserData data,String username){
+    public void pushNotification(DataContact data, String username){
         StringBuilder l= new StringBuilder();
         for(int i =0 ; i<username.length() ; i++){
             if(username.charAt(i)!='.' && username.charAt(i)!='#' && username.charAt(i)!='$' && username.charAt(i)!='[' && username.charAt(i)!=']')
@@ -100,7 +101,7 @@ public class ConnectionFireBase {
             if(mimageName.charAt(i)!='.' && mimageName.charAt(i)!='#' && mimageName.charAt(i)!='$' && mimageName.charAt(i)!='[' && mimageName.charAt(i)!=']')
                 imageName.append(mimageName.charAt(i));
         }
-        Log.e(TAG,location+" "+imageName+" "+imageUrl);
+        Log.e(TAG,location+" "+imageName+" "+imageName);
         StorageReference riversRef = mStorageRef.child(location+"/"+imageName);
         if(imageUrl != null)
             riversRef.putBytes(imageUrl)
@@ -118,7 +119,12 @@ public class ConnectionFireBase {
         }
     }
 
-    public void uploadImageToStorage(String location, String imageName, byte[] imageUrl, AppCompatActivity view){
+    public void uploadImageToStorage(String location, String mimageName, byte[] imageUrl, AppCompatActivity view){
+        StringBuilder imageName= new StringBuilder();
+        for(int i =0 ; i<mimageName.length() ; i++){
+            if(mimageName.charAt(i)!='.' && mimageName.charAt(i)!='#' && mimageName.charAt(i)!='$' && mimageName.charAt(i)!='[' && mimageName.charAt(i)!=']')
+                imageName.append(mimageName.charAt(i));
+        }
         Log.e(TAG,location+" "+imageName+" "+ Arrays.toString(imageUrl));
         ProgressDialog n = new ProgressDialog(view.getApplicationContext());
         StorageReference riversRef = mStorageRef.child(location+"/"+imageName);
@@ -144,7 +150,12 @@ public class ConnectionFireBase {
     }
 
     @SuppressLint("ShowToast")
-    public void uploadImageToStorage(String location, String imageName, Uri imageUrl, Activity view,ImageView imageView){
+    public void uploadImageToStorage(String location, String mimageName, Uri imageUrl, Activity view,ImageView imageView){
+        StringBuilder imageName= new StringBuilder();
+        for(int i =0 ; i<mimageName.length() ; i++){
+            if(mimageName.charAt(i)!='.' && mimageName.charAt(i)!='#' && mimageName.charAt(i)!='$' && mimageName.charAt(i)!='[' && mimageName.charAt(i)!=']')
+                imageName.append(mimageName.charAt(i));
+        }
         StorageReference riversRef = mStorageRef.child(location+"/"+imageName);
         ProgressDialog n = new ProgressDialog(view);
         n.setTitle("Uploading");
@@ -233,6 +244,7 @@ public class ConnectionFireBase {
                         .into(imageView);
                 }
         }).addOnFailureListener(exception -> {
+            n.dismiss();
             Toast.makeText(context,"Can't able to find your photo",Toast.LENGTH_LONG).show();
             Log.e(TAG,"Can't able to find the photo");
         });
@@ -241,9 +253,14 @@ public class ConnectionFireBase {
  /**
      * <p>return the url od the image of given location,name</p>
      * @param location ,where image has to be stored in the database
-     * @param imageName name of the image
+     * @param mimageName name of the image
      * */
-    public void downloadProfileImage(String location, String imageName, ImageView imageView, Context context,ProgressBar progressBar) {
+    public void downloadProfileImage(String location, String mimageName, ImageView imageView, Context context,ProgressBar progressBar) {
+        StringBuilder imageName= new StringBuilder();
+        for(int i =0 ; i<mimageName.length() ; i++){
+            if(mimageName.charAt(i)!='.' && mimageName.charAt(i)!='#' && mimageName.charAt(i)!='$' && mimageName.charAt(i)!='[' && mimageName.charAt(i)!=']')
+                imageName.append(mimageName.charAt(i));
+        }
         StorageReference riversRef = mStorageRef.child(location+"/"+imageName);
         progressBar.setVisibility(View.VISIBLE);
         riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()  {

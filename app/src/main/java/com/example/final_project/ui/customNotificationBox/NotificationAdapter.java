@@ -51,7 +51,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationData> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
         if(listItem == null)
-            listItem = LayoutInflater.from(mContext).inflate(R.layout.notification_teplate,parent,false);
+            listItem = LayoutInflater.from(mContext).inflate(R.layout.notification_template,parent,false);
 
         NotificationData currentNotification = notificationDataList.get(position);
 
