@@ -7,6 +7,7 @@ public class BlankContract {
     public static class BlankEnter implements BaseColumns {
 
         public final static String _ID = BaseColumns._ID;
+        public final static String _UID = BaseColumns._ID;
 
         public final static String LOGIN_TABLE_NAME = "finalUser_user";
         public final static String COLUMNS_USER_NAME = "name";

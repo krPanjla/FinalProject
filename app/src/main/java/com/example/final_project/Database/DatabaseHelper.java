@@ -3,6 +3,7 @@ package com.example.final_project.Database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -35,6 +36,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String DROP_TABLE_USER = "DROP TABLE IF EXISTS "+BlankContract.BlankEnter.LOGIN_TABLE_NAME;
     public static final String DROP_TABLE_BORROWER = "DROP TABLE IF EXISTS'"+ BlankContract.BlankEnter.BORROWER_TABLE_NAME +"';";
+    private static final String TAG = "DatabaseHelper";
+
     /**
      * Create a helper object to create, open, and/or manage a database.
      * This method always returns very quickly.  The database is not actually
@@ -45,6 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, TABLE_VERSION);
+        Log.e(TAG,"Create new database");
     }
 
     public void tableDrop(SQLiteDatabase db){
@@ -63,6 +67,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_BORROWER);
         db.execSQL(CREATE_TABLE_USER);
+        Log.e(TAG,"database drop");
     }
 
     /**

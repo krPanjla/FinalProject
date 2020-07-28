@@ -19,13 +19,13 @@ import com.example.final_project.Database.DatabaseHelper;
 import com.example.final_project.Database.useradate.UserDatadbProvider;
 import com.example.final_project.firebaseConnection.ConnectionFireBase;
 
-import static android.content.ContentValues.TAG;
 
 public class add_borrower extends AppCompatActivity {
     EditText id,email,amount;
     Button done;
+    private String TAG = "add_borrow";
     private String i,e;
-    private float a;
+    private long a;
     private final DatabaseHelper mdbHelper = new DatabaseHelper(this);
     //TODO Read below line
     //Required sigaction, We can create this requester(add_borrow) Activity as dialog box in the HomeFragment to make application more user friendly?
@@ -40,24 +40,23 @@ public class add_borrower extends AppCompatActivity {
         done=findViewById(R.id.button_done);
 
         done.setOnClickListener(v -> {
-
-            if(!id.getText().toString().trim().isEmpty() && !amount.getText().toString().trim().isEmpty() || !email.getText().toString().trim().isEmpty()  ) {
+            //email -> data in database
+            if(!id.getText().toString().trim().isEmpty() && !amount.getText().toString().trim().isEmpty()) {
                 //fetching values from edit texts
-                Log.e(TAG,"data check ok in add_borrower");
                 i = id.getText().toString().trim();
                 e = email.getText().toString().trim();
-                a = Float.parseFloat(amount.getText().toString().trim());
-
+                a = Long.parseLong(amount.getText().toString().trim());
+                boolean rowCount = false;
+                ConnectionFireBase connection = new ConnectionFireBase();
                 //save dataContact is a method in database class which inserts the values to the table
+                rowCount  = connection.pushNotification(i,e,a,mdbHelper,getApplicationContext());
 
-                boolean rowCount = saveContact();
-
-            if(rowCount) {
+                if(rowCount) {
                 Toast.makeText(add_borrower.this, "inserted", Toast.LENGTH_SHORT).show();
             }
 
             else{
-                Toast.makeText(add_borrower.this, "pehli fursat m nikal", Toast.LENGTH_SHORT).show();
+                Toast.makeText(add_borrower.this, "Failed to put your data", Toast.LENGTH_SHORT).show();
             }
             this.finish();
             this.finishActivity(0);
@@ -70,56 +69,6 @@ public class add_borrower extends AppCompatActivity {
             }
         });
 
-
-    }
-
-
-    private boolean saveContact(){
-        SQLiteDatabase sqLiteDatabase = null;
-        ContentValues values = new ContentValues();
-        ConnectionFireBase connection = new ConnectionFireBase();
-        try {
-            sqLiteDatabase = mdbHelper.getWritableDatabase();
-            values.put(BlankContract.BlankEnter._ID,i);
-            String userEmail = i;
-            StringBuilder l= new StringBuilder();
-            for(int i =0 ; i<userEmail.length() ; i++){
-                if(userEmail.charAt(i)!='.' && userEmail.charAt(i)!='#' && userEmail.charAt(i)!='$' && userEmail.charAt(i)!='[' && userEmail.charAt(i)!=']')
-                    l.append(userEmail.charAt(i));
-            }
-            values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_NAME,connection.getBorrowDbProvider(e,this.getApplicationContext()).getName());
-            Log.e(TAG,"Name : "+connection.getBorrowDbProvider(e,this.getApplicationContext()));
-            values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_DATE,e);
-            values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_FLAG,Boolean.FALSE);
-            values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_AMOUNT,a);
-            Log.e(TAG,i+"  "+e+"  "+a);
-        }catch(Exception e){
-            Log.e(TAG,"In side Exception "+e);
-        }
-        long result = -1;
-        if(sqLiteDatabase != null) result = sqLiteDatabase.insert(BlankContract.BlankEnter.BORROWER_TABLE_NAME, null,values);
-        Log.e(TAG,result+"@");
-        if(result != -1){
-            //Adding the notification in the firebase
-            ConnectionFireBase connectionFireBase = new ConnectionFireBase();
-            Home_DataContact contact = new Home_DataContact(getApplicationContext());
-            UserDatadbProvider provider = new UserDatadbProvider(getApplicationContext());
-            contact.setId(provider.getEmail());
-            String userEmail = i;
-            StringBuilder l= new StringBuilder();
-            for(int i =0 ; i<userEmail.length() ; i++){
-                if(userEmail.charAt(i)!='.' && userEmail.charAt(i)!='#' && userEmail.charAt(i)!='$' && userEmail.charAt(i)!='[' && userEmail.charAt(i)!=']')
-                    l.append(userEmail.charAt(i));
-            }
-            contact.setDate(e);
-            contact.setAmount(a);
-            contact.setName(connection.getBorrowDbProvider(e,this.getApplicationContext()).getName());
-            Log.e(TAG,connection.getBorrowDbProvider(e,this.getApplicationContext()).getName());
-            contact.setImageUrl("prof_image/"+l);
-            contact.setPayed(Boolean.FALSE+"");
-            connectionFireBase.pushNotification(contact,i);
-        }
-        return result != -1;
 
     }
 

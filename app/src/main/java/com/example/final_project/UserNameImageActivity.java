@@ -168,7 +168,7 @@ public class UserNameImageActivity extends AppCompatActivity {
         try {
             sqLiteDatabase = mdbHelper.getWritableDatabase();
             Log.e(TAG,u_name.getText().toString()+" "+getIntent().getStringExtra("phone")+" "+getIntent().getStringExtra("id"));
-            values.put(BlankContract.BlankEnter._ID ,getIntent().getStringExtra("id"));
+            values.put(BlankContract.BlankEnter._UID ,getIntent().getStringExtra("id"));
             values.put(BlankContract.BlankEnter.COLUMNS_USER_EMAIL,email);
             values.put(BlankContract.BlankEnter.COLUMNS_USER_NAME,u_name.getText().toString());
             if(image != null) {

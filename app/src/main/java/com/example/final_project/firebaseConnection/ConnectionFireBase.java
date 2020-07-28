@@ -3,7 +3,9 @@ package com.example.final_project.firebaseConnection;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
@@ -21,10 +23,14 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.example.final_project.Database.BlankContract;
 import com.example.final_project.Database.BorrowersDB.BorrowersDbProvider;
 import com.example.final_project.Database.BorrowersDB.Home_DataContact;
+import com.example.final_project.Database.DatabaseHelper;
+import com.example.final_project.Database.useradate.UserDatadbProvider;
 import com.example.final_project.R;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,10 +42,11 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static android.content.ContentValues.TAG;
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
+
 
 public class ConnectionFireBase {
-
+    private String TAG = "ConnectionFireBase";
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private StorageReference mStorageRef;
@@ -244,6 +251,38 @@ public class ConnectionFireBase {
         });
     }
 
+    public void downloadProfileImage(String location, String mimageName, ImageView imageView,View context) {
+        StringBuilder imageName= new StringBuilder();
+        for(int i =0 ; i<mimageName.length() ; i++){
+            if(mimageName.charAt(i)!='.' && mimageName.charAt(i)!='#' && mimageName.charAt(i)!='$' && mimageName.charAt(i)!='[' && mimageName.charAt(i)!=']')
+                imageName.append(mimageName.charAt(i));
+        }
+        StorageReference riversRef = mStorageRef.child(location+"/"+imageName);
+        // Got the download URL for 'users/me/profile.png'
+        riversRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            downloadImageUri = uri;
+            Glide.with(context.getContext())
+                    .load(uri)
+                    .placeholder(R.drawable.account_pic)
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            return false;
+                        }
+                    })
+                    .into(imageView);
+        }).addOnFailureListener(exception -> {
+            Toast.makeText(context.getContext(),"Can't able to find your photo",Toast.LENGTH_LONG).show();
+            Log.e(TAG,"Can't able to find the photo");
+        });
+    }
+
  /**
      * <p>return the url od the image of given location,name</p>
      * @param location ,where image has to be stored in the database
@@ -281,30 +320,132 @@ public class ConnectionFireBase {
         });
     }
 
+    public boolean pushNotification(String i, String e, long a, DatabaseHelper mdbHelper,Context context){
+        StringBuilder l= new StringBuilder();
+        for(int j =0 ; j<i.length() ; j++){
+            if(i.charAt(j)!='.' && i.charAt(j)!='#' && i.charAt(j)!='$' && i.charAt(j)!='[' && i.charAt(j)!=']')
+                l.append(i.charAt(j));
+        }
+        myRef = database.getReference("Member/"+l+"/UserProfile/");
+        Log.e(TAG,"datacheck : "+"Member/"+l+"/UserProfile/");
+        long result[] = new long[1];
+        ChildEventListener listener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                UserData newPost = dataSnapshot.getValue(UserData.class);
+                assert newPost != null;
+                Log.e(TAG,"Author: " + newPost.getName());
+                Log.e(TAG,"Previous Post ID: " + prevChildKey);
+
+                SQLiteDatabase sqLiteDatabase = null;
+                ConnectionFireBase connection = new ConnectionFireBase();
+                final String name = newPost.getName();
+                ContentValues values = new ContentValues();
+
+                try {
+                    sqLiteDatabase = mdbHelper.getWritableDatabase();
+                    Log.e(TAG,"values : "+i+"  "+e+"  "+a);
+                    Log.e(TAG,"Name : "+name);
+
+                    String userEmail = i;
+                    StringBuilder l= new StringBuilder();
+                    for(int i =0 ; i<userEmail.length() ; i++){
+                        if(userEmail.charAt(i)!='.' && userEmail.charAt(i)!='#' && userEmail.charAt(i)!='$' && userEmail.charAt(i)!='[' && userEmail.charAt(i)!=']')
+                            l.append(userEmail.charAt(i));
+                    }
+
+                    values.put(BlankContract.BlankEnter._ID,i);
+                    values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_NAME,name);
+                    values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_DATE,e);
+                    values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_FLAG,Boolean.FALSE);
+                    values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_AMOUNT,a);
+
+                }catch(Exception e){
+                    Log.e(TAG,"In side Exception "+e);
+                }
+                if(sqLiteDatabase != null) result[0] = sqLiteDatabase.insert(BlankContract.BlankEnter.BORROWER_TABLE_NAME, null,values);
+                Log.e(TAG,result[0]+": result ");
+                if(result[0] != -1){
+                    //Adding the notification in the firebase
+                    Home_DataContact contact = new Home_DataContact(context);
+                    UserDatadbProvider provider = new UserDatadbProvider(context);
+                    contact.setId(provider.getEmail());
+                    String userEmail =i;
+                    StringBuilder l= new StringBuilder();
+                    for(int i =0 ; i<userEmail.length() ; i++){
+                        if(userEmail.charAt(i)!='.' && userEmail.charAt(i)!='#' && userEmail.charAt(i)!='$' && userEmail.charAt(i)!='[' && userEmail.charAt(i)!=']')
+                            l.append(userEmail.charAt(i));
+                    }
+                    contact.setDate(e);
+                    contact.setAmount(a);
+                    Log.e(TAG,name);
+                    contact.setName(name);
+                    contact.setImageUrl("prof_image/"+l);
+                    contact.setPayed(Boolean.FALSE+"");
+                    connection.pushNotification(contact,i);
+                }
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {}
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        };
+
+        myRef.addChildEventListener(listener);
+
+        return result[0] != -1;
+    }
+
     /**
      * <p>return the url od the image of given location,name</p>
      * @param username ,name of the user
      * @return the object of BorrowDbProvider*/
-    public BorrowersDbProvider getBorrowDbProvider(String username, Context context) {
+    public UserData getUserData(String username) throws InterruptedException {
          StringBuilder l= new StringBuilder();
         for(int i =0 ; i<username.length() ; i++){
             if(username.charAt(i)!='.' && username.charAt(i)!='#' && username.charAt(i)!='$' && username.charAt(i)!='[' && username.charAt(i)!=']')
                 l.append(username.charAt(i));
         }
-        myRef = database.getReference("Member/"+l+"/Notification/");
-        ArrayList<Home_DataContact> list = new ArrayList<>();
-        final BorrowersDbProvider[] result = {new BorrowersDbProvider(context)};
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef = database.getReference("Member/"+l+"/UserProfile/");
+        Log.e(TAG,"datacheck : "+"Member/"+l+"/UserProfile/");
+        final UserData[] result = {new UserData()};
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Log.e(TAG,"GetBorrowDbProvider function : " +snapshot.getChildren());
+                Log.e(TAG,"GetBorrowDbProvider function : " +snapshot.getValue(UserData.class).getName());
+                result[0] = snapshot.getValue(UserData.class);
+                //Log.e(TAG, "sad" + result[0].getId());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+               Log.e(TAG,"The read failed: " + databaseError.getCode());
+            }
+        }).wait(1000);
+
+       /* myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.e(TAG,"as"+snapshot.getChildrenCount());
-                result[0] = snapshot.getValue(BorrowersDbProvider.class);
+                Log.e(TAG,"GetBorrowDbProvider function : " +snapshot.getChildren());
+                Log.e(TAG,"GetBorrowDbProvider function : " +snapshot.getValue(UserData.class).getName());
+                result[0] = snapshot.getValue(UserData.class);
                 //Log.e(TAG, "sad" + result[0].getId());
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
-        });
+        });*/
         return result[0];
     }
 

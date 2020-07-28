@@ -15,12 +15,15 @@ package com.example.final_project.ui.home;
         import com.bumptech.glide.Glide;
         import com.example.final_project.Database.BorrowersDB.Home_DataContact;
         import com.example.final_project.R;
+        import com.example.final_project.firebaseConnection.ConnectionFireBase;
 
+        import java.sql.Connection;
         import java.util.List;
 
 class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     private static final String TAG = "HomeAdapter";
     private List<Home_DataContact> mHomeDataContacts;
+    ConnectionFireBase connection = new ConnectionFireBase();
     private View contactView;
 
     // Pass in the contact array into the constructor
@@ -47,10 +50,23 @@ class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     public void onBindViewHolder(HomeAdapter.ViewHolder holder, int position) {
         // Get the data model based on position
         Home_DataContact homeDataContact = mHomeDataContacts.get(position);
-        Glide.with(contactView)
+        String username = homeDataContact.getId();
+        assert username!= null;
+        String email= "";
+        username.replaceAll(email,".");
+        email.replaceAll(email,"#");
+        email.replaceAll(email,"$");
+        email.replaceAll(email,"[");
+        email.replaceAll(email,"]");/*
+        for(int i =0 ; i<username.length() ; i++){
+            if(username.charAt(i)!='.' && username.charAt(i)!='#' && username.charAt(i)!='$' && username.charAt(i)!='[' && username.charAt(i)!=']')
+                email.append(username.charAt(i));
+        }*/
+        connection.downloadProfileImage("prof_image/",email.toString(),holder.image,contactView);
+       /* Glide.with(contactView)
                 .load(homeDataContact.getImageUrl())
                 .placeholder(R.drawable.account_pic)
-                .into(holder.image);
+                .into(holder.image);*/
         holder.name.setText(homeDataContact.getName());
         holder.date.setText(homeDataContact.getDate());
         holder.payed.setText("Payed : "+ homeDataContact.getPayed());
@@ -61,7 +77,7 @@ class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     // Returns the total count of items in the list
     @Override
     public int getItemCount() {
-        return mHomeDataContacts.size()/2;
+        return mHomeDataContacts.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

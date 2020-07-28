@@ -37,19 +37,19 @@ public class HomeFragment extends Fragment {
         recyclerView=view.findViewById(R.id.home_list);
         floatingActionButton=view.findViewById(R.id.add_person);
         Home_DataContact contact  = new Home_DataContact(this.getContext());
-        ArrayList<Home_DataContact> list = Home_DataContact.createContactsList(this.getContext());
         Log.e(TAG,"count Value"+ Home_DataContact.getCount(view.getContext()));
+
         if(!(Home_DataContact.getCount(view.getContext())<=0)) {
-            Log.e(TAG,"IN");
+            Log.e(TAG,"In the adapter");
+            ArrayList<Home_DataContact> list = Home_DataContact.createContactsList(this.getContext());
+            list.add(contact);
             HomeAdapter adapter = new HomeAdapter(list);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         }
         floatingActionButton.setOnClickListener(v -> {
             Intent intent=new Intent(getActivity(), add_borrower.class);
-            intent.putExtra("this",(Serializable)this);
             startActivity(intent);
-
         });
     return view;
     }
