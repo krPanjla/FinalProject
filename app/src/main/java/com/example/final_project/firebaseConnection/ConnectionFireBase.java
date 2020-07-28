@@ -257,7 +257,7 @@ public class ConnectionFireBase {
             if(mimageName.charAt(i)!='.' && mimageName.charAt(i)!='#' && mimageName.charAt(i)!='$' && mimageName.charAt(i)!='[' && mimageName.charAt(i)!=']')
                 imageName.append(mimageName.charAt(i));
         }
-        StorageReference riversRef = mStorageRef.child(location+"/"+imageName);
+        StorageReference riversRef = mStorageRef.child(location+"/"+imageName.toString());
         // Got the download URL for 'users/me/profile.png'
         riversRef.getDownloadUrl().addOnSuccessListener(uri -> {
             downloadImageUri = uri;
@@ -320,7 +320,7 @@ public class ConnectionFireBase {
         });
     }
 
-    public boolean pushNotification(String i, String e, long a, DatabaseHelper mdbHelper,Context context){
+    public boolean pushNotification(String i, String date, long a, DatabaseHelper mdbHelper,Context context){
         StringBuilder l= new StringBuilder();
         for(int j =0 ; j<i.length() ; j++){
             if(i.charAt(j)!='.' && i.charAt(j)!='#' && i.charAt(j)!='$' && i.charAt(j)!='[' && i.charAt(j)!=']')
@@ -340,47 +340,36 @@ public class ConnectionFireBase {
                 SQLiteDatabase sqLiteDatabase = null;
                 ConnectionFireBase connection = new ConnectionFireBase();
                 final String name = newPost.getName();
+                final String image = newPost.getImage();
                 ContentValues values = new ContentValues();
 
                 try {
                     sqLiteDatabase = mdbHelper.getWritableDatabase();
-                    Log.e(TAG,"values : "+i+"  "+e+"  "+a);
+                    Log.e(TAG,"values : "+i+"  "+date+"  "+a);
                     Log.e(TAG,"Name : "+name);
-
-                    String userEmail = i;
-                    StringBuilder l= new StringBuilder();
-                    for(int i =0 ; i<userEmail.length() ; i++){
-                        if(userEmail.charAt(i)!='.' && userEmail.charAt(i)!='#' && userEmail.charAt(i)!='$' && userEmail.charAt(i)!='[' && userEmail.charAt(i)!=']')
-                            l.append(userEmail.charAt(i));
-                    }
+                    Log.e(TAG,"Image : "+image);
 
                     values.put(BlankContract.BlankEnter._ID,i);
                     values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_NAME,name);
-                    values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_DATE,e);
+                    values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_DATE,date);
+                    values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_IMAGE,image);
                     values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_FLAG,Boolean.FALSE);
                     values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_AMOUNT,a);
 
-                }catch(Exception e){
-                    Log.e(TAG,"In side Exception "+e);
+                }catch(Exception ex){
+                    Log.e(TAG,"In side Exception "+ex);
                 }
                 if(sqLiteDatabase != null) result[0] = sqLiteDatabase.insert(BlankContract.BlankEnter.BORROWER_TABLE_NAME, null,values);
                 Log.e(TAG,result[0]+": result ");
                 if(result[0] != -1){
                     //Adding the notification in the firebase
                     Home_DataContact contact = new Home_DataContact(context);
-                    UserDatadbProvider provider = new UserDatadbProvider(context);
-                    contact.setId(provider.getEmail());
-                    String userEmail =i;
-                    StringBuilder l= new StringBuilder();
-                    for(int i =0 ; i<userEmail.length() ; i++){
-                        if(userEmail.charAt(i)!='.' && userEmail.charAt(i)!='#' && userEmail.charAt(i)!='$' && userEmail.charAt(i)!='[' && userEmail.charAt(i)!=']')
-                            l.append(userEmail.charAt(i));
-                    }
-                    contact.setDate(e);
+                    contact.setId(new UserDatadbProvider(context).getEmail());
+                    contact.setDate(date);
                     contact.setAmount(a);
                     Log.e(TAG,name);
                     contact.setName(name);
-                    contact.setImageUrl("prof_image/"+l);
+                    contact.setImageUrl(image);
                     contact.setPayed(Boolean.FALSE+"");
                     connection.pushNotification(contact,i);
                 }
@@ -388,16 +377,16 @@ public class ConnectionFireBase {
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {}
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String prevChildKey) {}
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String prevChildKey) {}
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
         };
 
         myRef.addChildEventListener(listener);
@@ -429,7 +418,7 @@ public class ConnectionFireBase {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
                Log.e(TAG,"The read failed: " + databaseError.getCode());
             }
         }).wait(1000);

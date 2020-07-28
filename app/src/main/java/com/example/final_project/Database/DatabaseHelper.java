@@ -28,6 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             BlankContract.BlankEnter._ID + " TEXT NOT NULL, "+
             BlankContract.BlankEnter.COLUMNS_BORROWER_NAME + " TEXT NOT NULL, "+
             BlankContract.BlankEnter.COLUMNS_BORROWER_DATE+" TEXT,"+
+            BlankContract.BlankEnter.COLUMNS_BORROWER_IMAGE+" TEXT,"+
             BlankContract.BlankEnter.COLUMNS_BORROWER_FLAG+" TEXT NOT NULL ,"+
             /*RAEL is use to store the floating point number in the sqlite database*/
             BlankContract.BlankEnter.COLUMNS_BORROWER_AMOUNT +" REAL NOT NULL) ;";

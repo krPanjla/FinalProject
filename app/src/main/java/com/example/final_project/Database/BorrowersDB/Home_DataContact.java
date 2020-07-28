@@ -104,14 +104,9 @@ public class Home_DataContact {
             contact.setId(email);
             contact.setName(cursor.getString(1));
             contact.setDate(cursor.getString(2));
-            contact.setPayed(cursor.getString(3));
-            StringBuilder imageName= new StringBuilder();
-            for(int i =0 ; i<email.length() ; i++){
-                if(email.charAt(i)!='.' && email.charAt(i)!='#' && email.charAt(i)!='$' && email.charAt(i)!='[' && email.charAt(i)!=']')
-                    imageName.append(email.charAt(i));
-            }
-            contact.setImageUrl("prof_image/"+imageName);
-            contact.setAmount(cursor.getDouble(4));
+            contact.setImageUrl(cursor.getString(3));
+            contact.setPayed(cursor.getString(4));
+            contact.setAmount(cursor.getDouble(5));
             mContacts.add(contact);
         }while(cursor.moveToNext());
         cursor.close();
