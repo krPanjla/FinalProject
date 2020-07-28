@@ -1,22 +1,23 @@
 package com.example.final_project;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
+import android.app.FragmentTransaction;
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.final_project.Database.BorrowersDB.BlankContact;
-import com.example.final_project.Database.BorrowersDB.Borrowers_Dd;
-import com.example.final_project.Database.BorrowersDB.DataContact;
+import com.example.final_project.Database.BlankContract;
+import com.example.final_project.Database.BorrowersDB.Home_DataContact;
+import com.example.final_project.Database.DatabaseHelper;
+import com.example.final_project.Database.useradate.UserDatadbProvider;
 import com.example.final_project.firebaseConnection.ConnectionFireBase;
-import com.example.final_project.ui.home.HomeFragment;
 
 import static android.content.ContentValues.TAG;
 
@@ -25,7 +26,9 @@ public class add_borrower extends AppCompatActivity {
     Button done;
     private String i,e;
     private float a;
-    private final Borrowers_Dd mdbHelper = new Borrowers_Dd(this);
+    private final DatabaseHelper mdbHelper = new DatabaseHelper(this);
+    //TODO Read below line
+    //Required sigaction, We can create this requester(add_borrow) Activity as dialog box in the HomeFragment to make application more user friendly?
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,11 +56,11 @@ public class add_borrower extends AppCompatActivity {
                 Toast.makeText(add_borrower.this, "inserted", Toast.LENGTH_SHORT).show();
             }
 
-            else
-               //#Pro line Bro :) :)
-               Toast.makeText(add_borrower.this, "pehli fursat m nikal", Toast.LENGTH_SHORT).show();
-            add_borrower.this.finishActivity(0);
-            add_borrower.this.finish();
+            else{
+                Toast.makeText(add_borrower.this, "pehli fursat m nikal", Toast.LENGTH_SHORT).show();
+            }
+            this.finish();
+            this.finishActivity(0);
             }else{
                 if(amount.getText().toString().trim().isEmpty())
                     Toast.makeText(getApplicationContext(),"You can't left amount empty",Toast.LENGTH_SHORT).show();
@@ -72,32 +75,49 @@ public class add_borrower extends AppCompatActivity {
 
 
     private boolean saveContact(){
-
         SQLiteDatabase sqLiteDatabase = null;
         ContentValues values = new ContentValues();
+        ConnectionFireBase connection = new ConnectionFireBase();
         try {
             sqLiteDatabase = mdbHelper.getWritableDatabase();
-            values.put(BlankContact.BlankEnter.COLUMNS_BORROWER_NAME,i);
-            values.put(BlankContact.BlankEnter.COLUMNS_BORROWER_DATE,e);
-            values.put(BlankContact.BlankEnter.COLUMNS_BORROWER_FLAG,Boolean.FALSE);
-            values.put(BlankContact.BlankEnter.COLUMNS_BORROWER_AMOUNT,a);
+            values.put(BlankContract.BlankEnter._ID,i);
+            String userEmail = i;
+            StringBuilder l= new StringBuilder();
+            for(int i =0 ; i<userEmail.length() ; i++){
+                if(userEmail.charAt(i)!='.' && userEmail.charAt(i)!='#' && userEmail.charAt(i)!='$' && userEmail.charAt(i)!='[' && userEmail.charAt(i)!=']')
+                    l.append(userEmail.charAt(i));
+            }
+            values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_NAME,connection.getBorrowDbProvider(e,this.getApplicationContext()).getName());
+            Log.e(TAG,"Name : "+connection.getBorrowDbProvider(e,this.getApplicationContext()));
+            values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_DATE,e);
+            values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_FLAG,Boolean.FALSE);
+            values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_AMOUNT,a);
             Log.e(TAG,i+"  "+e+"  "+a);
-        }catch(Exception ignored){
-            Log.e(TAG,"In side Exception "+ignored);
+        }catch(Exception e){
+            Log.e(TAG,"In side Exception "+e);
         }
         long result = -1;
-        if(sqLiteDatabase != null) result = sqLiteDatabase.insert(BlankContact.BlankEnter.BORROWER_TABLE_NAME, null,values);
+        if(sqLiteDatabase != null) result = sqLiteDatabase.insert(BlankContract.BlankEnter.BORROWER_TABLE_NAME, null,values);
         Log.e(TAG,result+"@");
         if(result != -1){
+            //Adding the notification in the firebase
             ConnectionFireBase connectionFireBase = new ConnectionFireBase();
-            DataContact contact = new DataContact(getApplicationContext());
-            contact.setId(i);
+            Home_DataContact contact = new Home_DataContact(getApplicationContext());
+            UserDatadbProvider provider = new UserDatadbProvider(getApplicationContext());
+            contact.setId(provider.getEmail());
+            String userEmail = i;
+            StringBuilder l= new StringBuilder();
+            for(int i =0 ; i<userEmail.length() ; i++){
+                if(userEmail.charAt(i)!='.' && userEmail.charAt(i)!='#' && userEmail.charAt(i)!='$' && userEmail.charAt(i)!='[' && userEmail.charAt(i)!=']')
+                    l.append(userEmail.charAt(i));
+            }
             contact.setDate(e);
             contact.setAmount(a);
-            contact.setImageUrl("prof+image/"+i);
+            contact.setName(connection.getBorrowDbProvider(e,this.getApplicationContext()).getName());
+            Log.e(TAG,connection.getBorrowDbProvider(e,this.getApplicationContext()).getName());
+            contact.setImageUrl("prof_image/"+l);
             contact.setPayed(Boolean.FALSE+"");
             connectionFireBase.pushNotification(contact,i);
-
         }
         return result != -1;
 

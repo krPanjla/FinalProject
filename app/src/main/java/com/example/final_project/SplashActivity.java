@@ -70,7 +70,8 @@ public class SplashActivity extends AppCompatActivity {
         //Animation for splash text
         Animation animationUtils = AnimationUtils.loadAnimation(this,R.anim.anim);
 
-        /**@Decleartion provides, Here we are going to make permissions of Email,Phone and Gmail.
+        /**
+         * @Decleartion provides, Here we are going to make permissions of Email,Phone and Gmail.
          * @Initialize , The mFirebaseAuth.
          * **/
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -103,12 +104,10 @@ public class SplashActivity extends AppCompatActivity {
             alertDialog.setTitle("No Google Play Services");
             alertDialog.setMessage("This app requires Google Play Services to be installed and enabled");
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            finish();
-                            System.exit(0);
-                        }
+                    (dialog, which) -> {
+                        dialog.dismiss();
+                        finish();
+                        System.exit(0);
                     });
             alertDialog.show();
 
@@ -121,8 +120,10 @@ public class SplashActivity extends AppCompatActivity {
                     //Toast.makeText(getApplicationContext(),"You are Signed in, Welcome to Project Android",Toast.LENGTH_LONG).show();
                    if(flag){
                        new Handler().postDelayed(
-                               ()->startActivity(new Intent(SplashActivity.this, RootActivity.class)
-                                       .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)),
+                               ()->{startActivity(new Intent(SplashActivity.this, RootActivity.class)
+                                       .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                               this.finish();
+                               },
                                1000);
                    }
 
@@ -135,13 +136,14 @@ public class SplashActivity extends AppCompatActivity {
 
                     // Create and launch sign-in intent
                     //for lambda function ()-> use java version 1.8+ low java version do't support lambda function
-                    new Handler().postDelayed(()->startActivityForResult(AuthUI.getInstance()
+                    new Handler().postDelayed(()->{startActivityForResult(AuthUI.getInstance()
                                     .createSignInIntentBuilder()
                                     .setLogo(R.mipmap.ic_launcher_round)
                                     .setIsSmartLockEnabled(false)
                                     .setAvailableProviders(providers)
                                     .build(),
-                            RC_SIGN_IN),1000);
+                            RC_SIGN_IN);},
+                            1000);
                 }
             };
         }
@@ -166,8 +168,10 @@ public class SplashActivity extends AppCompatActivity {
                             .putExtra("image",user.getPhotoUrl())
                             .putExtra("phone",user.getPhoneNumber())
                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    this.finish();
 
                     Toast.makeText(getApplicationContext(), "Your are Logged in " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+                    this.finish();
                 }
             } else {
                 Toast.makeText(getApplicationContext(),"Sorry you aren't able to make it",Toast.LENGTH_SHORT).show();

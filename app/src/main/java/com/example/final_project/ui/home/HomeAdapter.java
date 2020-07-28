@@ -9,24 +9,26 @@ package com.example.final_project.ui.home;
         import android.widget.ImageView;
         import android.widget.TextView;
 
+        import androidx.annotation.NonNull;
         import androidx.recyclerview.widget.RecyclerView;
 
         import com.bumptech.glide.Glide;
-        import com.example.final_project.Database.BorrowersDB.DataContact;
+        import com.example.final_project.Database.BorrowersDB.Home_DataContact;
         import com.example.final_project.R;
 
         import java.util.List;
 
 class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     private static final String TAG = "HomeAdapter";
-    private List<DataContact> mDataContacts;
+    private List<Home_DataContact> mHomeDataContacts;
     private View contactView;
 
     // Pass in the contact array into the constructor
-    public HomeAdapter(List<DataContact> dataContacts) {
-        mDataContacts = dataContacts;
+    public HomeAdapter(List<Home_DataContact> homeDataContacts) {
+        mHomeDataContacts = homeDataContacts;
     }
 
+    @NonNull
     @Override
     public HomeAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
@@ -36,8 +38,7 @@ class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         contactView = inflater.inflate(R.layout.home_template, parent, false);
 
         // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(contactView);
-        return viewHolder;
+        return  new ViewHolder(contactView);
     }
 
     // Involves populating data into the item through holder
@@ -45,22 +46,22 @@ class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(HomeAdapter.ViewHolder holder, int position) {
         // Get the data model based on position
-        DataContact dataContact = mDataContacts.get(position);
+        Home_DataContact homeDataContact = mHomeDataContacts.get(position);
         Glide.with(contactView)
-                .load(dataContact.getImageUrl())
+                .load(homeDataContact.getImageUrl())
                 .placeholder(R.drawable.account_pic)
                 .into(holder.image);
-        holder.name.setText(dataContact.getName());
-        holder.date.setText(dataContact.getDate());
-        holder.payed.setText("Payed : "+ dataContact.getPayed());
-        holder.amount.setText("Amount : "+ dataContact.getAmount());
+        holder.name.setText(homeDataContact.getName());
+        holder.date.setText(homeDataContact.getDate());
+        holder.payed.setText("Payed : "+ homeDataContact.getPayed());
+        holder.amount.setText("Amount : "+ homeDataContact.getAmount());
         Log.e(TAG,"Up and Done");
     }
 
     // Returns the total count of items in the list
     @Override
     public int getItemCount() {
-        return mDataContacts.size();
+        return mHomeDataContacts.size()/2;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

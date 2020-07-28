@@ -15,22 +15,17 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
-import com.example.final_project.Database.useradate.UserDatadbHelper;
+import com.example.final_project.Database.DatabaseHelper;
 import com.example.final_project.Database.useradate.UserDatadbProvider;
 import com.example.final_project.R;
 import com.example.final_project.firebaseConnection.ConnectionFireBase;
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -90,22 +85,20 @@ public class SettingsFragment extends Fragment {
         });
 
         sign_out = view.findViewById(R.id.signout);
-        sign_out.setOnClickListener(v ->{
-            new AlertDialog.Builder(requireActivity())
-                    .setPositiveButton("Yes", (dialog, which) ->{
-                        AuthUI.getInstance()
-                                .signOut(container.getContext())
-                                .addOnCompleteListener(task -> {
-                                    SQLiteDatabase sqLiteDatabase = new UserDatadbHelper(getContext()).getWritableDatabase();
-                                    sqLiteDatabase.execSQL(UserDatadbHelper.DROP_LOGIN_TABLE);
-                                    sqLiteDatabase.execSQL(UserDatadbHelper.CREATE_LOGIN_USER);
-                                    This.finish();
-                                });
-                    }).setNegativeButton("No",(dialog, which) -> {
+        sign_out.setOnClickListener(v -> new AlertDialog.Builder(requireActivity())
+                .setPositiveButton("Yes", (dialog, which) -> AuthUI.getInstance()
+                        .signOut(container.getContext())
+                        .addOnCompleteListener(task -> {
+                            SQLiteDatabase sqLiteDatabase = new DatabaseHelper(getContext()).getWritableDatabase();
+                            sqLiteDatabase.execSQL(DatabaseHelper.DROP_TABLE_BORROWER);
+                            sqLiteDatabase.execSQL(DatabaseHelper.CREATE_TABLE_BORROWER);
+                            sqLiteDatabase.execSQL(DatabaseHelper.DROP_TABLE_USER);
+                            sqLiteDatabase.execSQL(DatabaseHelper.CREATE_TABLE_USER);
+                            This.finish();
+                        })).setNegativeButton("No",(dialog, which) -> {
 
-            }).setTitle("Alert")
-                    .setMessage("Do you want to sign out?").show();
-        });
+        }).setTitle("Alert")
+                .setMessage("Do you want to sign out?").show());
         // Inflate the layout for this fragment
         return view;
     }

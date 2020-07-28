@@ -68,7 +68,7 @@
                     android:layout_weight="1"
                     android:fontFamily="serif"
                     android:text="Name"
-                    android:textColor="#000"
+                    android:textColor="@color/text"
                     android:textSize="28sp" />
             </LinearLayout>
 
@@ -95,7 +95,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:scaleType="fitCenter"
-                        android:src="@mipmap/ic_account" />
+                        android:src="@drawable/ic_account_" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -105,10 +105,10 @@
                             android:fontFamily="@string/font"
                             android:text="@string/account"
                             android:paddingStart="10dp"
-                            android:textColor="#000"
-                            android:background="@drawable/bottom_line_setting_text"
+                            android:textColor="@color/text"
+                           
                             android:lastBaselineToBottomHeight="10dp"
-                            android:textSize="28sp"
+                            android:textSize="18sp"
                             android:paddingLeft="10dp" />
                     </LinearLayout>
 
@@ -136,10 +136,10 @@
                             android:fontFamily="@string/font"
                             android:text="@string/title_notification"
                             android:paddingStart="10dp"
-                            android:textColor="#000"
-                            android:background="@drawable/bottom_line_setting_text"
+                            android:textColor="@color/text"
+                           
                             android:lastBaselineToBottomHeight="10dp"
-                            android:textSize="28sp"
+                            android:textSize="18sp"
                             android:paddingLeft="10dp" />
                     </LinearLayout>
 
@@ -168,14 +168,15 @@
                             android:text="@string/data_and_usage"
                             android:paddingStart="10dp"
                             android:paddingLeft="10dp"
-                            android:textColor="#000"
-                            android:background="@drawable/bottom_line_setting_text"
-                            android:textSize="28sp"
+                            android:textColor="@color/text"
+                           
+                            android:textSize="18sp"
                             tools:ignore="RtlSymmetry" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/important"
+                        android:layout_marginTop="40dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/setting_layout_background"
@@ -188,7 +189,7 @@
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
                             android:scaleType="fitCenter"
-                            android:src="@mipmap/ic_icon" />
+                            android:src="@drawable/ic_icon_star" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -199,9 +200,9 @@
                             android:text="@string/importent"
                             android:paddingStart="10dp"
                             android:paddingLeft="10dp"
-                            android:textColor="#000"
-                            android:background="@drawable/bottom_line_setting_text"
-                            android:textSize="28sp"
+                            android:textColor="@color/text"
+                           
+                            android:textSize="18sp"
                             tools:ignore="RtlSymmetry" />
                     </LinearLayout>
 
@@ -230,43 +231,11 @@
                             android:text="@string/data_and_usage"
                             android:paddingStart="10dp"
                             android:paddingLeft="10dp"
-                            android:textColor="#000"
-                            android:background="@drawable/bottom_line_setting_text"
-                            android:textSize="28sp"
+                            android:textColor="@color/text"
+                           
+                            android:textSize="18sp"
                             tools:ignore="RtlSymmetry" />
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/setting_layout_background"
-                        android:padding="10dp"
-                        android:id="@+id/share">
-
-
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:scaleType="fitCenter"
-                            android:src="@mipmap/ic_heart" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_weight="9"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:fontFamily="@string/font"
-                            android:text="Share with friend"
-                            android:paddingStart="10dp"
-                            android:textColor="#000"
-                            android:background="@drawable/bottom_line_setting_text"
-                            android:lastBaselineToBottomHeight="10dp"
-                            android:textSize="28sp"
-                            android:paddingLeft="10dp" />
-                    </LinearLayout>
-
                 </LinearLayout>
             <!--Theme column end -->
 
@@ -295,10 +264,41 @@
                     android:fontFamily="@string/font"
                     android:text="@string/action_sign_out"
                     android:paddingStart="10dp"
-                    android:textColor="#000"
-                    android:background="@drawable/bottom_line_setting_text"
+                    android:textColor="@color/text"
+                   
                     android:lastBaselineToBottomHeight="10dp"
-                    android:textSize="28sp"
+                    android:textSize="18sp"
+                    android:paddingLeft="10dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_layout_background"
+                android:padding="10dp"
+                android:id="@+id/share">
+
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/ic_heart" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="12"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:fontFamily="@string/font"
+                    android:text="Share with friend"
+                    android:paddingStart="10dp"
+                    android:textColor="@color/text"
+
+                    android:lastBaselineToBottomHeight="10dp"
+                    android:textSize="18sp"
                     android:paddingLeft="10dp" />
             </LinearLayout>
 

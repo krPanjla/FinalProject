@@ -21,7 +21,8 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.example.final_project.Database.BorrowersDB.DataContact;
+import com.example.final_project.Database.BorrowersDB.BorrowersDbProvider;
+import com.example.final_project.Database.BorrowersDB.Home_DataContact;
 import com.example.final_project.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static android.content.ContentValues.TAG;
@@ -59,7 +61,7 @@ public class ConnectionFireBase {
         Log.e(TAG,"Data Set to database");
     }
 
-    public void pushNotification(DataContact data, String username){
+    public void pushNotification(Home_DataContact data, String username){
         StringBuilder l= new StringBuilder();
         for(int i =0 ; i<username.length() ; i++){
             if(username.charAt(i)!='.' && username.charAt(i)!='#' && username.charAt(i)!='$' && username.charAt(i)!='[' && username.charAt(i)!=']')
@@ -192,16 +194,11 @@ public class ConnectionFireBase {
                 imageName.append(mimageName.charAt(i));
         }
         StorageReference riversRef = mStorageRef.child(location+"/"+imageName);
-        riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()  {
-            // Got the download URL for 'users/me/profile.png'
-            @Override
-            public void onSuccess(Uri uri) {
-                downloadImageUri = uri;
-                Log.e(TAG, "download image url : " + downloadImageUri.toString()+"\n path : "+uri.getPath()+"\n LPS : "+uri.getLastPathSegment());
-                }
-        }).addOnFailureListener(exception -> {
-            Log.e(TAG,"Can't able to find the photo");
-        });
+        // Got the download URL for 'users/me/profile.png'
+        riversRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            downloadImageUri = uri;
+            Log.e(TAG, "download image url : " + downloadImageUri.toString()+"\n path : "+uri.getPath()+"\n LPS : "+uri.getLastPathSegment());
+            }).addOnFailureListener(exception -> Log.e(TAG,"Can't able to find the photo"));
     }
 
     /**
@@ -220,30 +217,27 @@ public class ConnectionFireBase {
         n.setTitle("Loading");
         n.setMessage("Loading your image");
         n.show();
-        riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()  {
-            // Got the download URL for 'users/me/profile.png'
-            @Override
-            public void onSuccess(Uri uri) {
-                downloadImageUri = uri;
-                Glide.with(context.getApplicationContext())
-                        .load(uri)
-                        .placeholder(R.drawable.account_pic)
-                        .listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                n.dismiss();
-                                return false;
-                            }
+        // Got the download URL for 'users/me/profile.png'
+        riversRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            downloadImageUri = uri;
+            Glide.with(context.getApplicationContext())
+                    .load(uri)
+                    .placeholder(R.drawable.account_pic)
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            n.dismiss();
+                            return false;
+                        }
 
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                n.dismiss();
-                                return false;
-                            }
-                        })
-                        .into(imageView);
-                }
-        }).addOnFailureListener(exception -> {
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            n.dismiss();
+                            return false;
+                        }
+                    })
+                    .into(imageView);
+            }).addOnFailureListener(exception -> {
             n.dismiss();
             Toast.makeText(context,"Can't able to find your photo",Toast.LENGTH_LONG).show();
             Log.e(TAG,"Can't able to find the photo");
@@ -263,29 +257,24 @@ public class ConnectionFireBase {
         }
         StorageReference riversRef = mStorageRef.child(location+"/"+imageName);
         progressBar.setVisibility(View.VISIBLE);
-        riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()  {
-            // Got the download URL for 'users/me/profile.png'
-            @Override
-            public void onSuccess(Uri uri) {
-                Glide.with(context.getApplicationContext())
-                        .load(uri)
-                        .placeholder(R.drawable.account_pic)
-                        .listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                progressBar.setVisibility(View.GONE);
-                                return false;
-                            }
+        // Got the download URL for 'users/me/profile.png'
+        riversRef.getDownloadUrl().addOnSuccessListener(uri -> Glide.with(context.getApplicationContext())
+                .load(uri)
+                .placeholder(R.drawable.account_pic)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        progressBar.setVisibility(View.GONE);
+                        return false;
+                    }
 
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                progressBar.setVisibility(View.GONE);
-                                return false;
-                            }
-                        })
-                        .into(imageView);
-                }
-        }).addOnFailureListener(exception -> {
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        progressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .into(imageView)).addOnFailureListener(exception -> {
             progressBar.setVisibility(View.GONE);
             Toast.makeText(context,"Can't able to find your photo",Toast.LENGTH_LONG).show();
             Log.e(TAG,"Can't able to find the photo");
@@ -294,28 +283,29 @@ public class ConnectionFireBase {
 
     /**
      * <p>return the url od the image of given location,name</p>
-     * @param location ,where image has to be stored in the database
-     * @param string name of the image
-     * */
-    public void getString(String location, String string,Context context) {
-        myRef.child(location);
-        ProgressDialog d = new ProgressDialog(context);
-        d.setTitle("Loading");
-        d.setMessage("Loading text ...");
-        d.show();
+     * @param username ,name of the user
+     * @return the object of BorrowDbProvider*/
+    public BorrowersDbProvider getBorrowDbProvider(String username, Context context) {
+         StringBuilder l= new StringBuilder();
+        for(int i =0 ; i<username.length() ; i++){
+            if(username.charAt(i)!='.' && username.charAt(i)!='#' && username.charAt(i)!='$' && username.charAt(i)!='[' && username.charAt(i)!=']')
+                l.append(username.charAt(i));
+        }
+        myRef = database.getReference("Member/"+l+"/Notification/");
+        ArrayList<Home_DataContact> list = new ArrayList<>();
+        final BorrowersDbProvider[] result = {new BorrowersDbProvider(context)};
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.e(TAG,""+snapshot.getChildrenCount());
-                Log.e(TAG,""+snapshot.getValue());
-                d.dismiss();
+                Log.e(TAG,"as"+snapshot.getChildrenCount());
+                result[0] = snapshot.getValue(BorrowersDbProvider.class);
+                //Log.e(TAG, "sad" + result[0].getId());
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                d.dismiss();
-            }
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
+        return result[0];
     }
 
 }

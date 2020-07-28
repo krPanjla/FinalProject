@@ -5,6 +5,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.final_project.Database.BlankContract;
+import com.example.final_project.Database.DatabaseHelper;
+
 public class UserDatadbProvider {
 
     private static final String TAG = "UserDatadbProvider";
@@ -15,8 +18,8 @@ public class UserDatadbProvider {
      * @param context use this to get the context of the activity
      * */
     public UserDatadbProvider(Context context){
-        read = new UserDatadbHelper(context).getReadableDatabase();
-        write = new UserDatadbHelper(context).getWritableDatabase();
+        read = new DatabaseHelper(context).getReadableDatabase();
+        write = new DatabaseHelper(context).getWritableDatabase();
     }
 
     public int getCount(){

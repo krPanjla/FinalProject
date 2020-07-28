@@ -5,18 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,18 +20,14 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
-import com.example.final_project.Database.BorrowersDB.Borrowers_Dd;
-import com.example.final_project.Database.useradate.BlankContract;
-import com.example.final_project.Database.useradate.UserDatadbHelper;
+import com.example.final_project.Database.BlankContract;
+import com.example.final_project.Database.DatabaseHelper;
 import com.example.final_project.firebaseConnection.ConnectionFireBase;
 import com.example.final_project.firebaseConnection.UserData;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.Objects;
-
-import static android.content.ContentValues.TAG;
 
 public class UserNameImageActivity extends AppCompatActivity {
 
@@ -57,8 +49,7 @@ public class UserNameImageActivity extends AppCompatActivity {
     private  ConnectionFireBase connect;
     private  UserData data;
     private ProgressBar progressBar;
-    private final Borrowers_Dd mmdbHelper = new Borrowers_Dd(this);
-    private final com.example.final_project.Database.useradate.UserDatadbHelper mdbHelper = new UserDatadbHelper(this);
+    private final DatabaseHelper mdbHelper = new DatabaseHelper(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,6 +117,7 @@ public class UserNameImageActivity extends AppCompatActivity {
                     progressBar.setVisibility(ProgressBar.INVISIBLE);
                     startActivity(new Intent(UserNameImageActivity.this,RootActivity.class)
                             .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    this.finish();
                 }
 
                 else {
@@ -133,10 +125,11 @@ public class UserNameImageActivity extends AppCompatActivity {
                     new AlertDialog.Builder(UserNameImageActivity.this)
                             .setMessage("Your information don't save in the app's database ,which cause bad behavior of app.\n " +
                                     "To store your information in the app go to setting ")
-                            .setPositiveButton("Ok", (dialog, which) -> startActivity(new Intent(UserNameImageActivity.this,RootActivity.class)
-                                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)))
-                            .setNegativeButton("cancel", (dialog, which) -> startActivity(new Intent(UserNameImageActivity.this,RootActivity.class)
-                                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)))
+                            .setPositiveButton("Ok", (dialog, which) -> {
+                                //Direct to setting
+
+                            })
+                            .setNegativeButton("cancel", (dialog, which) -> {})
                             .setCancelable(true)
                             .setTitle("Alert")
                             .show();
@@ -190,8 +183,8 @@ public class UserNameImageActivity extends AppCompatActivity {
             }else
                 values.put(BlankContract.BlankEnter.COLUMNS_USER_IMAGE,"");
 
-        }catch(Exception ignored){
-            Log.e(TAG,"@ "+ignored);
+        }catch(Exception e){
+            Log.e(TAG,"@ "+e);
         }
         long result = -1;
         if(sqLiteDatabase != null) result = sqLiteDatabase.insert(BlankContract.BlankEnter.LOGIN_TABLE_NAME, BlankContract.BlankEnter._ID,values);
