@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -55,7 +56,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationData> {
 
         NotificationData currentNotification = notificationDataList.get(position);
 
-        ImageView image = listItem.findViewById(R.id.notification_image);
+        ImageView image = listItem.findViewById(R.id.notification_image_);
         Glide.with(mContext)
                 .load(currentNotification.getImageUrl())
                 .listener(new RequestListener<Drawable>() {
@@ -72,30 +73,31 @@ public class NotificationAdapter extends ArrayAdapter<NotificationData> {
                 })
         .into(image);
 
-        TextView name = listItem.findViewById(R.id.nof_name);
+        TextView name = listItem.findViewById(R.id.nof_name_);
         name.setText(currentNotification.getName());
-        Log.e(TAG,"Name loaded");
+        Log.e(TAG,"Name loaded :" + currentNotification.getName());
 
 
-        TextView date = listItem.findViewById(R.id.nof_date);
-        date.setText(currentNotification.getData());
-        Log.e(TAG,"date loaded");
+        TextView date = listItem.findViewById(R.id.nof_date_);
+        date.setText(currentNotification.getDate());
+        Log.e(TAG,"date loaded : "+ currentNotification.getDate());
 
-        TextView amount =  listItem.findViewById(R.id.nof_amount);
+        TextView amount =  listItem.findViewById(R.id.nof_amount_);
         amount.setText("Amount : "+currentNotification.getAmount());
-        Log.e(TAG,"Amount loaded");
+        Log.e(TAG,"Amount loaded : "+currentNotification.getAmount());
 
-        Button accpect = listItem.findViewById(R.id.buttonA);
-        accpect.setOnClickListener(v -> {
+        ImageButton accept = listItem.findViewById(R.id.buttonA);
+        accept.setOnClickListener(v -> {
 
         });
         Log.e(TAG,"get buttonA");
 
-        Button dinied = listItem.findViewById(R.id.buttonD);
-        dinied.setOnClickListener(v -> {
+        Button denied = listItem.findViewById(R.id.buttonD);
+        denied.setOnClickListener(v -> {
 
         });
         Log.e(TAG,"get buttonD");
+
         return listItem;
     }
 
