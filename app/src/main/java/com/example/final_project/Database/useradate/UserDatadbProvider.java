@@ -2,6 +2,7 @@ package com.example.final_project.Database.useradate;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -62,21 +63,17 @@ public class UserDatadbProvider {
         }
     }
 
-    public String getName(){
-        try(Cursor cursor = read.query(BlankContract.BlankEnter.LOGIN_TABLE_NAME, new String[]{BlankContract.BlankEnter.COLUMNS_USER_NAME}, null, null, null, null, null)){
-
+    public String getName() throws CursorIndexOutOfBoundsException {
+        Cursor cursor = read.query(BlankContract.BlankEnter.LOGIN_TABLE_NAME, new String[]{BlankContract.BlankEnter.COLUMNS_USER_NAME}, null, null, null, null, null);
             if(cursor != null){
                 cursor.moveToFirst();
                 String s = cursor.getString(0);
                 Log.e(TAG,"name : "+s);
                 return s;
-            }
-            else{
+            }else{
                 Log.e(TAG,"cant find the Name");
                 return null;
             }
-
-        }
     }
 
     public String getGender(){

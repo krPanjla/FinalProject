@@ -23,7 +23,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:text="Please provide your full-name and progilr photo" />
+            android:text="Please provide your name and profile photo" />
 
         <TextView
             android:layout_width="match_parent"

@@ -8,12 +8,5 @@
         android:icon="@drawable/ic_baseline_notifications_none_24"
         android:title="@string/action_settings"
         app:showAsAction="always" />
-
-  <!--  <item
-        android:id="@+id/action_out"
-        android:orderInCategory="100"
-        android:icon="@android:drawable/ic_lock_power_off"
-        android:title="Sign out"
-        app:showAsAction="always" />-->
-
+    
 </menu>

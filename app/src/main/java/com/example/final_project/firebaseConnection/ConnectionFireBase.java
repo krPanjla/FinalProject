@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -64,7 +65,7 @@ public class ConnectionFireBase {
                 l.append(userEmail.charAt(i));
         }
         myRef = database.getReference("Member/"+l+"/UserProfile/");
-        myRef.push().setValue(data);
+        myRef.setValue(data);
         Log.e(TAG,"Data Set to database");
     }
 
@@ -320,12 +321,22 @@ public class ConnectionFireBase {
         });
     }
 
+    /**Add the notification in the firebase database and storing in local database
+    * @param i get the email
+     * @param  date get the last date of returning the payment
+     * @param  a get the amount
+     * @param mdbHelper get the DatabaseHelper object
+     * @param context get the context of the activity
+     * @return  boolean value for if data inserted properly*/
+
     public boolean pushNotification(String i, String date, long a, DatabaseHelper mdbHelper,Context context){
         StringBuilder l= new StringBuilder();
         for(int j =0 ; j<i.length() ; j++){
             if(i.charAt(j)!='.' && i.charAt(j)!='#' && i.charAt(j)!='$' && i.charAt(j)!='[' && i.charAt(j)!=']')
                 l.append(i.charAt(j));
         }
+        ProgressBar p = new ProgressBar(context);
+
         myRef = database.getReference("Member/"+l+"/UserProfile/");
         Log.e(TAG,"datacheck : "+"Member/"+l+"/UserProfile/");
         long result[] = new long[1];
@@ -359,16 +370,18 @@ public class ConnectionFireBase {
                 }catch(Exception ex){
                     Log.e(TAG,"In side Exception "+ex);
                 }
-                if(sqLiteDatabase != null) result[0] = sqLiteDatabase.insert(BlankContract.BlankEnter.BORROWER_TABLE_NAME, null,values);
+                if(sqLiteDatabase != null) result[0] = sqLiteDatabase.insert(BlankContract.BlankEnter.BORROWER_TABLE_NAME, "notificationCheck",values);
                 Log.e(TAG,result[0]+": result ");
                 if(result[0] != -1){
+                    sqLiteDatabase = mdbHelper.getReadableDatabase();
                     //Adding the notification in the firebase
                     Home_DataContact contact = new Home_DataContact(context);
                     contact.setId(new UserDatadbProvider(context).getEmail());
                     contact.setDate(date);
                     contact.setAmount(a);
                     Log.e(TAG,name);
-                    contact.setName(name);
+                    contact.setName(new UserDatadbProvider(context).getName());
+                    Log.e(TAG,"Name ; "+new UserDatadbProvider(context).getName());
                     contact.setImageUrl(image);
                     contact.setPayed(Boolean.FALSE+"");
                     connection.pushNotification(contact,i);
@@ -395,9 +408,9 @@ public class ConnectionFireBase {
     }
 
     /**
-     * <p>return the url od the image of given location,name</p>
+     * <p>Add the notification in the firebase database and storing in local database</p>
      * @param username ,name of the user
-     * @return the object of BorrowDbProvider*/
+     * @return the object of UserData*/
     public UserData getUserData(String username) throws InterruptedException {
          StringBuilder l= new StringBuilder();
         for(int i =0 ; i<username.length() ; i++){

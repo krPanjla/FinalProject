@@ -1,5 +1,6 @@
 package com.example.final_project.ui.customNotificationBox;
 
+import android.app.NotificationManager;
 import android.widget.Adapter;
 
 public class NotificationData  {
@@ -7,24 +8,61 @@ public class NotificationData  {
     private String imageUrl;
     private String name;
     private String amount;
-    private String data;
-    private boolean status;
+    private int count;
+    private String id;
+    private String date;
+    private boolean payed;
+    private String uniqueId;
 
-    public NotificationData(String imageUrl, String name, String amount, String data, boolean status) {
+    public NotificationData(){
+        //this for firebase
+    }
+    public NotificationData(String imageUrl, String name, String amount, String date, boolean status) {
         this.imageUrl = imageUrl;
         this.name = name;
         this.amount = amount;
-        this.data = data;
-        this.status = status;
+        this.date = date;
+        this.payed = status;
     }
 
-    public NotificationData(String imageUrl, String name, String amount, String data) {
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
+    }
+
+    public NotificationData(String imageUrl, String name, String amount, String date) {
         this.imageUrl = imageUrl;
         this.name = name;
         this.amount = amount;
-        this.data = data;
+        this.date = date;
     }
 
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public boolean isPayed() {
+        return payed;
+    }
+
+    public void setPayed(boolean payed) {
+        this.payed = payed;
+    }
 
     public String getImageUrl() {
         return imageUrl;
@@ -50,21 +88,13 @@ public class NotificationData  {
         this.amount = amount;
     }
 
-    public String getData() {
-        return data;
+    public String getDate() {
+        return date;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
 
 }

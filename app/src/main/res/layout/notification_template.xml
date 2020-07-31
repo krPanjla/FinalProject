@@ -8,11 +8,10 @@
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="16dp"
         app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="9dp"
+        android:layout_margin="8dp"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -23,7 +22,7 @@
             android:background="@color/setting_background">
 
             <TextView
-                android:id="@+id/nof_name"
+                android:id="@+id/nof_name_"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -37,48 +36,47 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/nof_date"
+                android:id="@+id/nof_date_"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="Data"
                 android:textColor="#000"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="@+id/nof_name"
+                app:layout_constraintEnd_toEndOf="@+id/nof_name_"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/nof_name"
-                app:layout_constraintTop_toBottomOf="@+id/nof_name" />
+                app:layout_constraintStart_toStartOf="@+id/nof_name_"
+                app:layout_constraintTop_toBottomOf="@+id/nof_name_" />
 
             <TextView
-                android:id="@+id/nof_amount"
+                android:id="@+id/nof_amount_"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginBottom="16dp"
                 android:text="Amount : "
                 android:textColor="#000"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/buttonA"
-                android:layout_width="94dp"
-                android:layout_height="40dp"
-                android:layout_gravity="end"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="Accept"
-                android:textColor="#000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_check_24"
                 app:background="@color/green"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/buttonD"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/nof_amount"
+                app:layout_constraintStart_toEndOf="@+id/nof_amount_"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintVertical_bias="1.0"
+                android:layout_gravity="end"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"/>
 
             <Button
                 android:id="@+id/buttonD"
@@ -104,15 +102,16 @@
                 android:layout_marginTop="28dp"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="30dp"
-                app:layout_constraintBottom_toTopOf="@+id/nof_amount"
+                app:layout_constraintBottom_toTopOf="@+id/nof_amount_"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0">
 
                 <ImageView
-                    android:id="@+id/notification_image"
+                    android:id="@+id/notification_image_"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
+                    android:scaleType="centerCrop"
                     android:layout_gravity="center"
                     android:src="@drawable/account_pic" />
 

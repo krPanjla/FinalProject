@@ -17,6 +17,12 @@ public class UserNotification {
         this.SenderName = SenderName;
         this.ReviverName = ReviverName;
     }
+    public UserNotification(String SenderName,String ReviverName,double Amount,String date){
+        this.Amount = Amount;
+        this.date = date;
+        this.SenderName = SenderName;
+        this.ReviverName = ReviverName;
+    }
 
     public String getSenderName() {
         return SenderName;
