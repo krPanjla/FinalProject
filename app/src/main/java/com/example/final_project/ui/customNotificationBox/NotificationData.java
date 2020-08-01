@@ -7,17 +7,16 @@ public class NotificationData  {
 
     private String imageUrl;
     private String name;
-    private String amount;
+    private Long amount;
     private int count;
     private String id;
     private String date;
     private boolean payed;
-    private String uniqueId;
 
     public NotificationData(){
         //this for firebase
     }
-    public NotificationData(String imageUrl, String name, String amount, String date, boolean status) {
+    public NotificationData(String imageUrl, String name, Long amount, String date, boolean status) {
         this.imageUrl = imageUrl;
         this.name = name;
         this.amount = amount;
@@ -25,15 +24,7 @@ public class NotificationData  {
         this.payed = status;
     }
 
-    public String getUniqueId() {
-        return uniqueId;
-    }
-
-    public void setUniqueId(String uniqueId) {
-        this.uniqueId = uniqueId;
-    }
-
-    public NotificationData(String imageUrl, String name, String amount, String date) {
+    public NotificationData(String imageUrl, String name, Long amount, String date) {
         this.imageUrl = imageUrl;
         this.name = name;
         this.amount = amount;
@@ -60,8 +51,8 @@ public class NotificationData  {
         return payed;
     }
 
-    public void setPayed(boolean payed) {
-        this.payed = payed;
+    public void setPayed(String payed) {
+        this.payed = Boolean.parseBoolean(payed);
     }
 
     public String getImageUrl() {
@@ -80,11 +71,11 @@ public class NotificationData  {
         this.name = name;
     }
 
-    public String getAmount() {
+    public Long getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(Long amount) {
         this.amount = amount;
     }
 
