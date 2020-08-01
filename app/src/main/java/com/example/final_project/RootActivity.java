@@ -37,6 +37,7 @@ public class RootActivity extends AppCompatActivity {
     private CustomNotificationView notification;
     private PaymentsFragment paymentsFragment;
     private SettingsFragment settingsFragment;
+    private Menu mMenu;
     private ArrayList<NotificationData> notificationDataList = new ArrayList<>();
     private String TAG = "RootActivity";
 
@@ -48,6 +49,7 @@ public class RootActivity extends AppCompatActivity {
         frameLayout=findViewById(R.id.main_frame);
         homeFragment=new HomeFragment();
         notification = new CustomNotificationView(this);
+        MenuItem notificationItem = findViewById(R.id.action_settings);
         //TODO Get the notification from firebase NotificationData
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         StringBuilder email = new StringBuilder();
@@ -63,9 +65,13 @@ public class RootActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 NotificationData post = dataSnapshot.getValue(NotificationData.class);
-                post.setUniqueId(dataSnapshot.getKey());
                 Log.e(TAG,"Unique key :");
-                notificationDataList.add(post);
+                if(dataSnapshot.getChildrenCount()!=0) {
+                    notificationDataList.add(post);
+                   // notificationItem.setIcon(R.drawable.ic_baseline_notifications_24);
+                }
+                //else
+                    //notificationItem.setIcon(getResources().getDrawable(R.drawable.ic_baseline_notifications_none_24));
             }
 
             @Override
@@ -104,6 +110,7 @@ public class RootActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
+        mMenu = menu;
         inflater.inflate(R.menu.main, menu);
         return true;
     }

@@ -21,8 +21,6 @@ public class CustomNotificationView {
     }
 
     public void getNotificationBox(ArrayList<NotificationData> notificationDataList){
-        String[] StringArray = new String[]{"No Notification"};
-        final ArrayAdapter simpleAdapter = new ArrayAdapter<>(application,R.layout.notifications,StringArray);
 
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(application);
         builderSingle.setTitle("Notification");
@@ -37,9 +35,6 @@ public class CustomNotificationView {
         if(arrayAdapter.getCount() != 0){
             Log.e(TAG,"Notification Adapter : "+arrayAdapter.getCount());
             builderSingle.setAdapter(arrayAdapter, (dialog, which) -> {});
-        }else {
-            Log.e(TAG,"Simple Adapter : "+arrayAdapter.getCount());
-            builderSingle.setAdapter(simpleAdapter,((dialog, which) -> {}));
         }
         Log.e(TAG,"showing the data");
         builderSingle.show();
