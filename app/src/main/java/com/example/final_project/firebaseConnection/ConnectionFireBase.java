@@ -65,7 +65,8 @@ public class ConnectionFireBase {
                 l.append(userEmail.charAt(i));
         }
         myRef = database.getReference("Member/"+l+"/UserProfile/");
-        myRef.setValue(data);
+
+        myRef.push().setValue(data);
         Log.e(TAG,"Data Set to database");
     }
 

@@ -18,7 +18,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.final_project.Database.DatabaseHelper;
 import com.example.final_project.Database.useradate.UserDatadbProvider;
@@ -33,6 +36,9 @@ import static android.app.Activity.RESULT_OK;
 
 public class SettingsFragment extends Fragment {
 
+    private ProfileFragment profileFragment;
+   private SettingsFragment settingsFragment;
+    CardView cardView;
     private static final String TAG = "SettingFragment";
     private AppCompatActivity This;
     private LinearLayout sign_out;
@@ -44,7 +50,7 @@ public class SettingsFragment extends Fragment {
     static final int REQUEST_IMAGE_CAPTURE=1;
     static final int SELECT_FILE=0;
     private UserDatadbProvider provider;
-    public SettingsFragment(AppCompatActivity activity){
+   public SettingsFragment(AppCompatActivity activity){
         This = activity;
     }
     @Override
@@ -56,6 +62,24 @@ public class SettingsFragment extends Fragment {
         name = view.findViewById(R.id.name);
         imageView = view.findViewById(R.id.prof_image);
         progressBar = view.findViewById(R.id.progressbar2);
+
+        profileFragment=new ProfileFragment();
+        cardView=view.findViewById(R.id.edit_profile);
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                FragmentManager fragmentManager=getFragmentManager();
+                FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_frame,profileFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+            }
+
+
+        });
 
         try{
             name.setText(provider.getName());

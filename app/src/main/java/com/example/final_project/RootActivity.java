@@ -63,7 +63,7 @@ public class RootActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 NotificationData post = dataSnapshot.getValue(NotificationData.class);
-                post.setUniqueId(dataSnapshot.getKey());
+
                 Log.e(TAG,"Unique key :");
                 notificationDataList.add(post);
             }
@@ -98,6 +98,7 @@ public class RootActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_frame,fragment);
         fragmentTransaction.commit();
+
 
     }
 
