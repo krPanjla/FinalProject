@@ -6,7 +6,7 @@
         android:id="@+id/action_settings"
         android:orderInCategory="99"
         android:icon="@drawable/ic_baseline_notifications_none_24"
-        android:title="@string/action_settings"
+        android:title="@string/title_notification"
         app:showAsAction="always" />
     
 </menu>

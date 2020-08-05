@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -25,12 +24,10 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.final_project.Database.BlankContract;
-import com.example.final_project.Database.BorrowersDB.BorrowersDbProvider;
 import com.example.final_project.Database.BorrowersDB.Home_DataContact;
 import com.example.final_project.Database.DatabaseHelper;
 import com.example.final_project.Database.useradate.UserDatadbProvider;
 import com.example.final_project.R;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,10 +37,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Objects;
 
 
 public class ConnectionFireBase {
@@ -336,58 +335,64 @@ public class ConnectionFireBase {
             if(i.charAt(j)!='.' && i.charAt(j)!='#' && i.charAt(j)!='$' && i.charAt(j)!='[' && i.charAt(j)!=']')
                 l.append(i.charAt(j));
         }
-        ProgressBar p = new ProgressBar(context);
-
-        myRef = database.getReference("Member/"+l+"/UserProfile/");
-        Log.e(TAG,"datacheck : "+"Member/"+l+"/UserProfile/");
+        ProgressDialog p = new ProgressDialog(context.getApplicationContext());
+        myRef = database.getReference("Member/"+l+"/");
+        Log.e(TAG,"data check : "+"Member/"+l+"/");
+        final String[] image = new String[1];
+        final String[] name = new String[1];
         long result[] = new long[1];
         ChildEventListener listener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                UserData newPost = dataSnapshot.getValue(UserData.class);
-                assert newPost != null;
-                Log.e(TAG,"Author: " + newPost.getName());
-                Log.e(TAG,"Previous Post ID: " + prevChildKey);
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    if(ds.getKey().equals("name")){
+                        name[0] = ds.getValue(String.class);
+                        Log.e(TAG,"Name !: " + name[0]);
+                        Log.e(TAG,"Name #: " + name[0]);
+                        Log.e(TAG,"Previous Post ID: ");
 
-                SQLiteDatabase sqLiteDatabase = null;
-                ConnectionFireBase connection = new ConnectionFireBase();
-                final String name = newPost.getName();
-                final String image = newPost.getImage();
-                ContentValues values = new ContentValues();
+                        SQLiteDatabase sqLiteDatabase = null;
+                        ConnectionFireBase connection = new ConnectionFireBase();
+                        ContentValues values = new ContentValues();
 
-                try {
-                    sqLiteDatabase = mdbHelper.getWritableDatabase();
-                    Log.e(TAG,"values : "+i+"  "+date+"  "+a);
-                    Log.e(TAG,"Name : "+name);
-                    Log.e(TAG,"Image : "+image);
+                        try {
+                            sqLiteDatabase = mdbHelper.getWritableDatabase();
+                            Log.e(TAG,"values : "+i+"  "+date+"  "+a);
+                            Log.e(TAG,"Name : "+ name[0]);
+                            Log.e(TAG,"Image : "+ image[0]);
 
-                    values.put(BlankContract.BlankEnter._ID,i);
-                    values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_NAME,name);
-                    values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_DATE,date);
-                    values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_IMAGE,image);
-                    values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_FLAG,Boolean.FALSE);
-                    values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_AMOUNT,a);
+                            values.put(BlankContract.BlankEnter._ID,i);
+                            values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_NAME, name[0]);
+                            values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_DATE,date);
+                            values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_IMAGE, image[0]);
+                            values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_FLAG,Boolean.FALSE);
+                            values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_AMOUNT,a);
 
-                }catch(Exception ex){
-                    Log.e(TAG,"In side Exception "+ex);
+                        }catch(Exception ex){
+                            Log.e(TAG,"In side Exception "+ex);
+                        }
+                        if(sqLiteDatabase != null) result[0] = sqLiteDatabase.insert(BlankContract.BlankEnter.BORROWER_TABLE_NAME, "notificationCheck",values);
+                        Log.e(TAG,result[0]+": result ");
+                        if(result[0] != -1){
+                            sqLiteDatabase = mdbHelper.getReadableDatabase();
+                            //Adding the notification in the firebase
+                            Home_DataContact contact = new Home_DataContact(context);
+                            contact.setId(new UserDatadbProvider(context).getEmail());
+                            contact.setDate(date);
+                            contact.setAmount(a);
+                            Log.e(TAG, name[0]);
+                            contact.setName(new UserDatadbProvider(context).getName());
+                            Log.e(TAG,"Name ; "+new UserDatadbProvider(context).getName());
+                            contact.setImageUrl(image[0]);
+                            contact.setPayed(Boolean.FALSE+"");
+                            connection.pushNotification(contact,i);
+                        }
+
+                    }else if(ds.getKey().equals("image")){
+                        image[0] = ds.getValue(String.class);
+                        Log.e(TAG,"Image !: " + image[0]);
+                    }
                 }
-                if(sqLiteDatabase != null) result[0] = sqLiteDatabase.insert(BlankContract.BlankEnter.BORROWER_TABLE_NAME, "notificationCheck",values);
-                Log.e(TAG,result[0]+": result ");
-                if(result[0] != -1){
-                    sqLiteDatabase = mdbHelper.getReadableDatabase();
-                    //Adding the notification in the firebase
-                    Home_DataContact contact = new Home_DataContact(context);
-                    contact.setId(new UserDatadbProvider(context).getEmail());
-                    contact.setDate(date);
-                    contact.setAmount(a);
-                    Log.e(TAG,name);
-                    contact.setName(new UserDatadbProvider(context).getName());
-                    Log.e(TAG,"Name ; "+new UserDatadbProvider(context).getName());
-                    contact.setImageUrl(image);
-                    contact.setPayed(Boolean.FALSE+"");
-                    connection.pushNotification(contact,i);
-                }
-
             }
 
             @Override
