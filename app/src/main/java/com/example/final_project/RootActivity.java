@@ -90,7 +90,13 @@ public class RootActivity extends AppCompatActivity {
              */
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                NotificationData post = snapshot.getValue(NotificationData.class);
+                if(snapshot.getChildrenCount()!=0) {
+                    assert post != null;
+                    Log.e(TAG,"Name : " + post.getName());
+                    Log.e(TAG,"Id : " + post.getId());
+                    notificationDataList.add(post);
+                }
             }
 
             /**
@@ -102,6 +108,17 @@ public class RootActivity extends AppCompatActivity {
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
 
+                Log.e(TAG,snapshot.toString()+"Remove Data");
+                NotificationData post = snapshot.getValue(NotificationData.class);
+                if(snapshot.getChildrenCount()!=0) {
+                    while(notificationDataList.isEmpty()){
+                        if(notificationDataList.equals(snapshot.getValue(NotificationData.class))){
+                            Log.e(TAG,"removing data");
+                            continue;
+                        }
+                        notificationDataList.listIterator().next();
+                    }
+                }
             }
 
             /**

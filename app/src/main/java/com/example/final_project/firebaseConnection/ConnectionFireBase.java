@@ -224,11 +224,7 @@ public class ConnectionFireBase {
      * @param mimageName name of the image
      * */
     public void downloadProfileImage(String location, String mimageName, ImageView imageView, Context context) {
-        StringBuilder imageName= new StringBuilder();
-        for(int i =0 ; i<mimageName.length() ; i++){
-            if(mimageName.charAt(i)!='.' && mimageName.charAt(i)!='#' && mimageName.charAt(i)!='$' && mimageName.charAt(i)!='[' && mimageName.charAt(i)!=']')
-                imageName.append(mimageName.charAt(i));
-        }
+        String imageName= Formate.toUsername(mimageName);
         StorageReference riversRef = mStorageRef.child(location+"/"+imageName);
         ProgressDialog n = new ProgressDialog(context);
         n.setTitle("Loading");

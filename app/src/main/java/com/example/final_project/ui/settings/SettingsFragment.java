@@ -28,6 +28,7 @@ import com.example.final_project.Database.useradate.UserDatadbProvider;
 import com.example.final_project.R;
 import com.example.final_project.UserNameImageActivity;
 import com.example.final_project.firebaseConnection.ConnectionFireBase;
+import com.example.final_project.ui.profile.ProfileFragment;
 import com.firebase.ui.auth.AuthUI;
 
 import java.io.ByteArrayOutputStream;

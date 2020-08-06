@@ -207,9 +207,12 @@ public class SplashActivity extends AppCompatActivity {
 
                        }else{
                            new Handler().postDelayed(
-                                   ()->{startActivity(new Intent(SplashActivity.this, UserNameImageActivity.class)
-                                           .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                                       this.finish();
+                                   ()->{
+                                       AuthUI.getInstance().signOut(getApplicationContext());
+                                       finish();
+                                       overridePendingTransition(0, 0);
+                                       startActivity(getIntent());
+                                       overridePendingTransition(0, 0);
                                    },
                                    1000);
                        }

@@ -22,9 +22,15 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.example.final_project.CheckService.Formate;
+import com.example.final_project.Database.useradate.UserDatadbProvider;
 import com.example.final_project.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,12 +97,48 @@ public class NotificationAdapter extends ArrayAdapter<NotificationData> {
         ImageButton accept = listItem.findViewById(R.id.buttonA);
         accept.setOnClickListener(v -> {
             DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
-            NotificationData data = new NotificationData();
+            DatabaseReference myRef2 = FirebaseDatabase.getInstance().getReference("Member/"+ Formate.toUsername(new UserDatadbProvider(mContext).getEmail())+"/DueBill");
+            myRef2.setValue(currentNotification);
+            Query query = myRef.child("Member/"+ Formate.toUsername(new UserDatadbProvider(mContext).getEmail())+"/Notification").orderByChild("count").equalTo(currentNotification.getCount());
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot dataSnapshot:
+                            snapshot.getChildren()) {
+                        dataSnapshot.getRef().removeValue();
+                        Log.e(TAG,"Data removed");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e(TAG, "onCancelled", error.toException());
+                }
+            });
         });
         Log.e(TAG,"get buttonA");
 
         ImageButton denied = listItem.findViewById(R.id.buttonD);
         denied.setOnClickListener(v -> {
+
+            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
+            NotificationData data = new NotificationData();
+            Query query = myRef.child("Member/"+ Formate.toUsername(new UserDatadbProvider(mContext).getEmail())+"/Notification").orderByChild("count").equalTo(currentNotification.getCount());
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot dataSnapshot:
+                            snapshot.getChildren()) {
+                        dataSnapshot.getRef().removeValue();
+                        Log.e(TAG,"Data removed");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e(TAG, "onCancelled", error.toException());
+                }
+            });
 
         });
         Log.e(TAG,"get buttonD");
