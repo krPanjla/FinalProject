@@ -18,6 +18,7 @@ public class Home_DataContact {
     private String date;
     private String imageUrl;
     private String payed;
+    private long count;
     private double amount;
 
     public Home_DataContact(Context context){
@@ -36,10 +37,21 @@ public class Home_DataContact {
             return Math.max(cursor.getCount(),0);
         }
     }
-    public int getCount(){
+
+    public void setCount(long count) {
+        this.count = count;
+    }
+
+    public int Count(){
         try (Cursor cursor = read.query(BlankContract.BlankEnter.BORROWER_TABLE_NAME, null, null, null, null, null, null)) {
             if(cursor.getCount() == -1) Log.e(TAG,"getCount : "+cursor.getCount());
             return Math.max(cursor.getCount(),0);
+        }
+    }
+    public Long getCount(){
+        try (Cursor cursor = read.query(BlankContract.BlankEnter.BORROWER_TABLE_NAME, null, null, null, null, null, null)) {
+            if(cursor.getCount() == -1) Log.e(TAG,"getCount : "+cursor.getCount());
+            return this.count;
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.final_project;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -11,18 +12,29 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.final_project.CheckService.Formate;
 import com.example.final_project.CheckService.GoogleServices;
+import com.example.final_project.Database.useradate.UserDatadbProvider;
+import com.example.final_project.ui.customNotificationBox.NotificationData;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.OAuthProvider;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.AbstractSequentialList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 
@@ -44,6 +56,8 @@ public class SplashActivity extends AppCompatActivity {
     public final static int RC_SIGN_IN = 7;
     private List<AuthUI.IdpConfig> providers;
     private boolean flag =true;
+    private String TAG = "SplashScreen";
+    private ArrayList<NotificationData> notificationDataList = new ArrayList<>();
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private Object View;
@@ -119,12 +133,86 @@ public class SplashActivity extends AppCompatActivity {
                 if(user != null){
                     //Toast.makeText(getApplicationContext(),"You are Signed in, Welcome to Project Android",Toast.LENGTH_LONG).show();
                    if(flag){
-                       new Handler().postDelayed(
-                               ()->{startActivity(new Intent(SplashActivity.this, RootActivity.class)
-                                       .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                               this.finish();
-                               },
-                               1000);
+                       if(new UserDatadbProvider(this.getApplicationContext()).getCount() != 0){
+                           FirebaseDatabase.getInstance().getReference("Member/"+
+                                   Formate.toUsername(new UserDatadbProvider(this.getApplicationContext()).getEmail()) +
+                                   "/Notification")
+                                   .addChildEventListener(new ChildEventListener() {
+
+                               /**
+                                * This method is triggered when a new child is added to the location to which this listener was
+                                * added.
+                                *
+                                * Fetch the data from the Notification from firebase and put it into the NotificationDialog box
+                                *
+                                * @param dataSnapshot          An immutable snapshot of the data at the new child location
+                                * @param previousChildName The key name of sibling location ordered before the new child. This
+                                */
+                               @Override
+                               public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                                   Log.e(TAG,"Data in json : "+dataSnapshot);
+                                   NotificationData post = dataSnapshot.getValue(NotificationData.class);
+                                   if(dataSnapshot.getChildrenCount()!=0) {
+                                       assert post != null;
+                                       Log.e(TAG,"Name : " + post.getName());
+                                       Log.e(TAG,"Id : " + post.getId());
+                                       notificationDataList.add(post);
+                                   }
+                               }
+
+                               /**
+                                * This method is triggered when the data at a child location has changed.
+                                *
+                                * @param snapshot          An immutable snapshot of the data at the new data at the child location
+                                * @param previousChildName The key name of sibling location ordered before the child. This will
+                                */
+                               @Override
+                               public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                               }
+
+                               /**
+                                * This method is triggered when a child is removed from the location to which this listener was
+                                * added.
+                                *
+                                * @param snapshot An immutable snapshot of the data at the child that was removed.
+                                */
+                               @Override
+                               public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+                               }
+
+                               /**
+                                * This method is triggered when a child location's priority changes. See {@link
+                                * DatabaseReference#setPriority(Object)} and <a
+                                * href="https://firebase.google.com/docs/database/android/retrieve-data#data_order"
+                                * target="_blank">Ordered Data</a> for more information on priorities and ordering data.
+                                *
+                                * @param snapshot          An immutable snapshot of the data at the location that moved.
+                                * @param previousChildName The key name of the sibling location ordered before the child
+                                */
+                               @Override
+                               public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                               }
+
+                               @Override
+                               public void onCancelled(@NonNull DatabaseError databaseError) {
+                                   Log.e(TAG,"The read failed: " + databaseError.getCode());
+                               }
+                           });
+                           startActivity(new Intent(SplashActivity.this, RootActivity.class)
+                                           .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                                       this.finish();
+
+                       }else{
+                           new Handler().postDelayed(
+                                   ()->{startActivity(new Intent(SplashActivity.this, UserNameImageActivity.class)
+                                           .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                                       this.finish();
+                                   },
+                                   1000);
+                       }
                    }
 
                 }else{

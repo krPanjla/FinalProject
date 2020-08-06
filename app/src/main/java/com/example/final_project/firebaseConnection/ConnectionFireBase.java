@@ -23,6 +23,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.example.final_project.CheckService.Formate;
 import com.example.final_project.Database.BlankContract;
 import com.example.final_project.Database.BorrowersDB.Home_DataContact;
 import com.example.final_project.Database.DatabaseHelper;
@@ -37,12 +38,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.sql.Timestamp;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.Objects;
+import java.util.Date;
 
 
 public class ConnectionFireBase {
@@ -156,6 +154,17 @@ public class ConnectionFireBase {
         else{
             Log.e(TAG,"Url is empty");
         }
+    }
+
+
+    public void downloadProfileImage(String mimageName) {
+        String imageName= Formate.toUsername(mimageName);
+        StorageReference riversRef = mStorageRef.child("prof_image"+"/"+imageName);
+        // Got the download URL for 'users/me/profile.png'
+        riversRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            downloadImageUri = uri;
+            Log.e(TAG, "download image url : " + downloadImageUri.toString()+"\n path : "+uri.getPath()+"\n LPS : "+uri.getLastPathSegment());
+        }).addOnFailureListener(exception -> Log.e(TAG,"Can't able to find the photo"));
     }
 
     @SuppressLint("ShowToast")
@@ -329,12 +338,7 @@ public class ConnectionFireBase {
      * @return  boolean value for if data inserted properly*/
 
     public boolean pushNotification(String i, String date, long a, DatabaseHelper mdbHelper,Context context){
-        StringBuilder l= new StringBuilder();
-        for(int j =0 ; j<i.length() ; j++){
-            if(i.charAt(j)!='.' && i.charAt(j)!='#' && i.charAt(j)!='$' && i.charAt(j)!='[' && i.charAt(j)!=']')
-                l.append(i.charAt(j));
-        }
-        ProgressDialog p = new ProgressDialog(context.getApplicationContext());
+        String l= Formate.toUsername(i);
         myRef = database.getReference("Member/"+l+"/");
         Log.e(TAG,"data check : "+"Member/"+l+"/");
         final String[] image = new String[1];
@@ -379,10 +383,12 @@ public class ConnectionFireBase {
                             contact.setId(new UserDatadbProvider(context).getEmail());
                             contact.setDate(date);
                             contact.setAmount(a);
+                            contact.setCount(new Timestamp(new Date().getTime()).getTime());
+                            Log.e(TAG,"Current timestamp : "+new Timestamp(new Date().getTime()).getTime());
                             Log.e(TAG, name[0]);
                             contact.setName(new UserDatadbProvider(context).getName());
                             Log.e(TAG,"Name ; "+new UserDatadbProvider(context).getName());
-                            contact.setImageUrl(image[0]);
+                            contact.setImageUrl(new UserDatadbProvider(context).getImage());
                             contact.setPayed(Boolean.FALSE+"");
                             connection.pushNotification(contact,i);
                         }

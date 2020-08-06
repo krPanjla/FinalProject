@@ -8,7 +8,7 @@ public class NotificationData  {
     private String imageUrl;
     private String name;
     private Long amount;
-    private int count;
+    private Long count;
     private String id;
     private String date;
     private boolean payed;
@@ -31,11 +31,11 @@ public class NotificationData  {
         this.date = date;
     }
 
-    public int getCount() {
+    public Long getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(Long count) {
         this.count = count;
     }
 

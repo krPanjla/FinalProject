@@ -23,6 +23,8 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.final_project.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,11 +90,12 @@ public class NotificationAdapter extends ArrayAdapter<NotificationData> {
 
         ImageButton accept = listItem.findViewById(R.id.buttonA);
         accept.setOnClickListener(v -> {
-
+            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
+            NotificationData data = new NotificationData();
         });
         Log.e(TAG,"get buttonA");
 
-        Button denied = listItem.findViewById(R.id.buttonD);
+        ImageButton denied = listItem.findViewById(R.id.buttonD);
         denied.setOnClickListener(v -> {
 
         });
