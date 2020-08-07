@@ -2,6 +2,7 @@ package com.example.final_project.ui.home;
 
         import android.annotation.SuppressLint;
         import android.content.Context;
+        import android.graphics.Color;
         import android.util.Log;
         import android.view.LayoutInflater;
         import android.view.View;
@@ -9,7 +10,9 @@ package com.example.final_project.ui.home;
         import android.widget.ImageView;
         import android.widget.TextView;
 
+        import androidx.annotation.ColorRes;
         import androidx.annotation.NonNull;
+        import androidx.cardview.widget.CardView;
         import androidx.recyclerview.widget.RecyclerView;
 
         import com.example.final_project.Database.BorrowersDB.Home_DataContact;
@@ -56,7 +59,9 @@ class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                 .into(holder.image);*/
         holder.name.setText(homeDataContact.getName());
         holder.date.setText(homeDataContact.getDate());
-        holder.payed.setText("Payed : "+ homeDataContact.getPayed());
+        if(homeDataContact.getPayed()){
+            holder.payed.setCardBackgroundColor(Color.rgb(144,238,144));
+        }
         holder.amount.setText("Amount : "+ homeDataContact.getAmount());
         Log.e(TAG,"Up and Done");
     }
@@ -71,7 +76,8 @@ class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
-        public TextView name,date,amount,payed;
+        public TextView name,date,amount;
+        public CardView payed;
         public ImageView image;
 
         // We also create a constructor that accepts the entire item row

@@ -75,7 +75,7 @@
 
     <com.github.ybq.android.spinkit.SpinKitView
         android:id="@+id/progressbar"
-        style="@style/SpinKitView.Large.CubeGrid"
+        style="@style/SpinKitView.Large.Wave"
         android:layout_width="120dp"
         android:layout_height="129dp"
         android:layout_gravity="center"

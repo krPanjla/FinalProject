@@ -328,7 +328,7 @@
 
         <com.github.ybq.android.spinkit.SpinKitView
             android:id="@+id/progressbar2"
-            style="@style/SpinKitView.Large.ChasingDots"
+            style="@style/SpinKitView.Large.Wave"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center"

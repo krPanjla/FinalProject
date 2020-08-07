@@ -23,6 +23,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.example.final_project.CheckService.Formate;
 import com.example.final_project.Database.BlankContract;
 import com.example.final_project.Database.BorrowersDB.Home_DataContact;
 import com.example.final_project.Database.DatabaseHelper;
@@ -37,14 +38,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.sql.Timestamp;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.Objects;
+import java.util.Date;
 
-
+//Todo : Add Time limits in the fetching process and low-internet connectivity alert
 public class ConnectionFireBase {
     private String TAG = "ConnectionFireBase";
     private FirebaseDatabase database;
@@ -159,6 +157,17 @@ public class ConnectionFireBase {
         }
     }
 
+
+    public void downloadProfileImage(String mimageName) {
+        String imageName= Formate.toUsername(mimageName);
+        StorageReference riversRef = mStorageRef.child("prof_image"+"/"+imageName);
+        // Got the download URL for 'users/me/profile.png'
+        riversRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            downloadImageUri = uri;
+            Log.e(TAG, "download image url : " + downloadImageUri.toString()+"\n path : "+uri.getPath()+"\n LPS : "+uri.getLastPathSegment());
+        }).addOnFailureListener(exception -> Log.e(TAG,"Can't able to find the photo"));
+    }
+
     @SuppressLint("ShowToast")
     public void uploadImageToStorage(String location, String mimageName, Uri imageUrl, Activity view,ImageView imageView){
         StringBuilder imageName= new StringBuilder();
@@ -215,11 +224,7 @@ public class ConnectionFireBase {
      * @param mimageName name of the image
      * */
     public void downloadProfileImage(String location, String mimageName, ImageView imageView, Context context) {
-        StringBuilder imageName= new StringBuilder();
-        for(int i =0 ; i<mimageName.length() ; i++){
-            if(mimageName.charAt(i)!='.' && mimageName.charAt(i)!='#' && mimageName.charAt(i)!='$' && mimageName.charAt(i)!='[' && mimageName.charAt(i)!=']')
-                imageName.append(mimageName.charAt(i));
-        }
+        String imageName= Formate.toUsername(mimageName);
         StorageReference riversRef = mStorageRef.child(location+"/"+imageName);
         ProgressDialog n = new ProgressDialog(context);
         n.setTitle("Loading");
@@ -330,17 +335,12 @@ public class ConnectionFireBase {
      * @return  boolean value for if data inserted properly*/
 
     public boolean pushNotification(String i, String date, long a, DatabaseHelper mdbHelper,Context context){
-        StringBuilder l= new StringBuilder();
-        for(int j =0 ; j<i.length() ; j++){
-            if(i.charAt(j)!='.' && i.charAt(j)!='#' && i.charAt(j)!='$' && i.charAt(j)!='[' && i.charAt(j)!=']')
-                l.append(i.charAt(j));
-        }
-        ProgressDialog p = new ProgressDialog(context.getApplicationContext());
+        String l= Formate.toUsername(i);
         myRef = database.getReference("Member/"+l+"/");
         Log.e(TAG,"data check : "+"Member/"+l+"/");
         final String[] image = new String[1];
         final String[] name = new String[1];
-        long result[] = new long[1];
+        long[] result = new long[1];
         ChildEventListener listener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
@@ -374,17 +374,18 @@ public class ConnectionFireBase {
                         if(sqLiteDatabase != null) result[0] = sqLiteDatabase.insert(BlankContract.BlankEnter.BORROWER_TABLE_NAME, "notificationCheck",values);
                         Log.e(TAG,result[0]+": result ");
                         if(result[0] != -1){
-                            sqLiteDatabase = mdbHelper.getReadableDatabase();
                             //Adding the notification in the firebase
                             Home_DataContact contact = new Home_DataContact(context);
                             contact.setId(new UserDatadbProvider(context).getEmail());
                             contact.setDate(date);
                             contact.setAmount(a);
+                            contact.setCount(new Timestamp(new Date().getTime()).getTime());
+                            Log.e(TAG,"Current timestamp : "+new Timestamp(new Date().getTime()).getTime());
                             Log.e(TAG, name[0]);
                             contact.setName(new UserDatadbProvider(context).getName());
                             Log.e(TAG,"Name ; "+new UserDatadbProvider(context).getName());
-                            contact.setImageUrl(image[0]);
-                            contact.setPayed(Boolean.FALSE+"");
+                            contact.setImageUrl(new UserDatadbProvider(context).getImage());
+                            contact.setPayed(false);
                             connection.pushNotification(contact,i);
                         }
 
@@ -430,8 +431,6 @@ public class ConnectionFireBase {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                Log.e(TAG,"GetBorrowDbProvider function : " +snapshot.getChildren());
-                Log.e(TAG,"GetBorrowDbProvider function : " +snapshot.getValue(UserData.class).getName());
                 result[0] = snapshot.getValue(UserData.class);
                 //Log.e(TAG, "sad" + result[0].getId());
             }

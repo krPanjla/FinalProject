@@ -17,7 +17,8 @@ public class Home_DataContact {
     private String name;
     private String date;
     private String imageUrl;
-    private String payed;
+    private boolean payed;
+    private long count;
     private double amount;
 
     public Home_DataContact(Context context){
@@ -36,10 +37,21 @@ public class Home_DataContact {
             return Math.max(cursor.getCount(),0);
         }
     }
-    public int getCount(){
+
+    public void setCount(long count) {
+        this.count = count;
+    }
+
+    public int Count(){
         try (Cursor cursor = read.query(BlankContract.BlankEnter.BORROWER_TABLE_NAME, null, null, null, null, null, null)) {
             if(cursor.getCount() == -1) Log.e(TAG,"getCount : "+cursor.getCount());
             return Math.max(cursor.getCount(),0);
+        }
+    }
+    public Long getCount(){
+        try (Cursor cursor = read.query(BlankContract.BlankEnter.BORROWER_TABLE_NAME, null, null, null, null, null, null)) {
+            if(cursor.getCount() == -1) Log.e(TAG,"getCount : "+cursor.getCount());
+            return this.count;
         }
     }
 
@@ -59,11 +71,11 @@ public class Home_DataContact {
         this.imageUrl = imageUrl;
     }
 
-    public String getPayed() {
+    public boolean getPayed() {
         return payed;
     }
 
-    public void setPayed(String payed) {
+    public void setPayed(boolean payed) {
         this.payed = payed;
     }
 
@@ -105,7 +117,7 @@ public class Home_DataContact {
             contact.setName(cursor.getString(1));
             contact.setDate(cursor.getString(2));
             contact.setImageUrl(cursor.getString(3));
-            contact.setPayed(cursor.getString(4));
+            contact.setPayed(Boolean.parseBoolean(cursor.getString(4)));
             contact.setAmount(cursor.getDouble(5));
             mContacts.add(contact);
         }while(cursor.moveToNext());

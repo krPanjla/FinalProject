@@ -1,14 +1,23 @@
 package com.example.final_project.CheckService;
 
+import android.util.Log;
+
 import com.example.final_project.Database.useradate.UserDatadbProvider;
 
 public class Formate {
-    public static String toUsername(String s){
+    private static final String TAG = "Formate";
+
+    public static String toUsername(String s) {
         StringBuilder string = new StringBuilder();
-        for(int i=0;i<s.length();i++){
-            if(s.charAt(i)!='.' && s.charAt(i)!='#' && s.charAt(i)!='$' && s.charAt(i)!='[' && s.charAt(i)!=']')
-                string.append(s.charAt(i));
+        try {
+            for (int i = 0; i < s.length(); i++) {
+                if (s.charAt(i) != '.' && s.charAt(i) != '#' && s.charAt(i) != '$' && s.charAt(i) != '[' && s.charAt(i) != ']')
+                    string.append(s.charAt(i));
+            }
+            return string.toString().trim();
+        }catch (NullPointerException e){
+            Log.e(TAG,e+" : Length");
+            return null;
         }
-        return string.toString();
     }
 }

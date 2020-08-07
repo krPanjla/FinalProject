@@ -1,4 +1,4 @@
-package com.example.final_project.ui.settings;
+package com.example.final_project.ui.profile;
 
 import android.os.Bundle;
 

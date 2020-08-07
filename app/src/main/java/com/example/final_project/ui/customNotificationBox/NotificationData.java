@@ -8,34 +8,25 @@ public class NotificationData  {
     private String imageUrl;
     private String name;
     private Long amount;
-    private int count;
+    private Long count;
     private String id;
     private String date;
     private boolean payed;
 
+
     public NotificationData(){
         //this for firebase
     }
-    public NotificationData(String imageUrl, String name, Long amount, String date, boolean status) {
-        this.imageUrl = imageUrl;
-        this.name = name;
-        this.amount = amount;
-        this.date = date;
-        this.payed = status;
+
+    public boolean isPayed() {
+        return payed;
     }
 
-    public NotificationData(String imageUrl, String name, Long amount, String date) {
-        this.imageUrl = imageUrl;
-        this.name = name;
-        this.amount = amount;
-        this.date = date;
-    }
-
-    public int getCount() {
+    public Long getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(Long count) {
         this.count = count;
     }
 
@@ -47,13 +38,7 @@ public class NotificationData  {
         this.id = id;
     }
 
-    public boolean isPayed() {
-        return payed;
-    }
 
-    public void setPayed(String payed) {
-        this.payed = Boolean.parseBoolean(payed);
-    }
 
     public String getImageUrl() {
         return imageUrl;
@@ -88,4 +73,7 @@ public class NotificationData  {
     }
 
 
+    public void setPayed(boolean payed) {
+        this.payed = payed;
+    }
 }
