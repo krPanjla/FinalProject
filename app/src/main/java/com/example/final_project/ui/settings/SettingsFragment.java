@@ -66,19 +66,13 @@ public class SettingsFragment extends Fragment {
 
         profileFragment=new ProfileFragment();
         cardView=view.findViewById(R.id.edit_profile);
-        cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        cardView.setOnClickListener(v -> {
 
 
-                FragmentManager fragmentManager=getFragmentManager();
-                FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.main_frame,profileFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-
-            }
-
+            FragmentManager fragmentManager=getChildFragmentManager();
+            FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.main_frame,profileFragment);
+            fragmentTransaction.commit();
 
         });
 
@@ -152,7 +146,6 @@ public class SettingsFragment extends Fragment {
         else if(requestCode==SELECT_FILE && resultCode == RESULT_OK && data != null && data.getData() != null){
             Uri selectedImage = data.getData();
             connect.uploadImageToStorage("prof_image",provider.getEmail(),selectedImage,getActivity(),imageView);
-            //TODO Update ImageUrl to Firebase
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

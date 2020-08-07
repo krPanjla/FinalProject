@@ -1,4 +1,4 @@
-package com.example.final_project.ui.customNotificationBox;
+package com.example.final_project.ui.payments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,6 +24,7 @@ import com.bumptech.glide.request.target.Target;
 import com.example.final_project.CheckService.Formate;
 import com.example.final_project.Database.useradate.UserDatadbProvider;
 import com.example.final_project.R;
+import com.example.final_project.ui.customNotificationBox.NotificationData;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,7 +37,7 @@ import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
-public class NotificationAdapter extends ArrayAdapter<NotificationData> {
+public class PaymentAdapter extends ArrayAdapter<NotificationData> {
 
     private Context mContext;
     private List<NotificationData> notificationDataList;
@@ -47,7 +47,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationData> {
      *
      * @param context The current context.
      */
-    public NotificationAdapter(@NonNull Context context, @SuppressLint("SupportAnnotationUsage") @LayoutRes ArrayList<NotificationData> list) {
+    public PaymentAdapter(@NonNull Context context, @SuppressLint("SupportAnnotationUsage") @LayoutRes ArrayList<NotificationData> list) {
         super(context,0,list);
         mContext = context;
         notificationDataList = list;
@@ -79,7 +79,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationData> {
                         return false;
                     }
                 })
-        .into(image);
+                .into(image);
 
         TextView name = listItem.findViewById(R.id.nof_name_);
         name.setText(currentNotification.getName());
@@ -90,33 +90,13 @@ public class NotificationAdapter extends ArrayAdapter<NotificationData> {
         date.setText(currentNotification.getDate());
         Log.e(TAG,"date loaded : "+ currentNotification.getDate());
 
-        currentNotification.isPayed();
-
         TextView amount =  listItem.findViewById(R.id.nof_amount_);
         amount.setText("Amount : "+currentNotification.getAmount());
         Log.e(TAG,"Amount loaded : "+currentNotification.getAmount());
 
         ImageButton accept = listItem.findViewById(R.id.buttonA);
         accept.setOnClickListener(v -> {
-            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
-            DatabaseReference myRef2 = FirebaseDatabase.getInstance().getReference("Member/"+ Formate.toUsername(new UserDatadbProvider(mContext).getEmail())+"/DueBill");
-            myRef2.push().setValue(currentNotification);
-            Query query = myRef.child("Member/"+ Formate.toUsername(new UserDatadbProvider(mContext).getEmail())+"/Notification").orderByChild("count").equalTo(currentNotification.getCount());
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot dataSnapshot:
-                            snapshot.getChildren()) {
-                        dataSnapshot.getRef().removeValue();
-                        Log.e(TAG,"Data removed");
-                    }
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e(TAG, "onCancelled", error.toException());
-                }
-            });
         });
         Log.e(TAG,"get buttonA");
 
@@ -125,7 +105,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationData> {
 
             DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
             NotificationData data = new NotificationData();
-            Query query = myRef.child("Member/"+ Formate.toUsername(new UserDatadbProvider(mContext).getEmail())+"/Notification").orderByChild("count").equalTo(currentNotification.getCount());
+            Query query = myRef.child("Member/"+ Formate.toUsername(new UserDatadbProvider(mContext).getEmail())+"/DueBill").orderByChild("count").equalTo(currentNotification.getCount());
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {

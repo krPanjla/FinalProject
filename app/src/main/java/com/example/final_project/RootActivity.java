@@ -7,7 +7,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.widget.Toolbar;
 
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,7 +57,6 @@ public class RootActivity extends AppCompatActivity {
         homeFragment=new HomeFragment();
         notification = new CustomNotificationView(this);
         MenuItem notificationItem = findViewById(R.id.action_settings);
-        //TODO Get the notification from firebase NotificationData
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         String email= Formate.toUsername(new UserDatadbProvider(this.getApplicationContext()).getEmail());
         DatabaseReference ref = database.getReference("Member/"+email+"/Notification");
@@ -72,13 +73,16 @@ public class RootActivity extends AppCompatActivity {
              */
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
-                Log.e(TAG,"Data in json : "+dataSnapshot);
+                //Log.e(TAG,"Data in json : "+dataSnapshot);
                 NotificationData post = dataSnapshot.getValue(NotificationData.class);
                 if(dataSnapshot.getChildrenCount()!=0) {
                     assert post != null;
                     Log.e(TAG,"Name : " + post.getName());
                     Log.e(TAG,"Id : " + post.getId());
                     notificationDataList.add(post);
+                    //TODO change the color of the notification item in the menu Bar to the normal use the notification icon present in the Drawable folder
+                }else{
+                    //TODO change the color of the notification item in the menu Bar to the red use the notification icon present in the Drawable folder
                 }
             }
 
@@ -110,15 +114,8 @@ public class RootActivity extends AppCompatActivity {
 
                 Log.e(TAG,snapshot.toString()+"Remove Data");
                 NotificationData post = snapshot.getValue(NotificationData.class);
-                if(snapshot.getChildrenCount()!=0) {
-                    while(notificationDataList.isEmpty()){
-                        if(notificationDataList.equals(snapshot.getValue(NotificationData.class))){
-                            Log.e(TAG,"removing data");
-                            continue;
-                        }
-                        notificationDataList.listIterator().next();
-                    }
-                }
+
+                notificationDataList.remove(post);
             }
 
             /**
@@ -180,6 +177,8 @@ public class RootActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         if (item.getItemId() == R.id.action_settings) {
+            ArrayList invertList = new ArrayList<NotificationData>();
+            //Todo add ; invert of the array list
             notification.getNotificationBox(notificationDataList);
             return true;
         }

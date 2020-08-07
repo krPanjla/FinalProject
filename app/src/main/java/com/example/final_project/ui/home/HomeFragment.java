@@ -26,7 +26,6 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
-    DatabaseHelper borrowers_dd;
     RecyclerView recyclerView;
     FloatingActionButton floatingActionButton;
 
@@ -46,6 +45,7 @@ public class HomeFragment extends Fragment {
             HomeAdapter adapter = new HomeAdapter(list);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
         }
         floatingActionButton.setOnClickListener(v -> {
             Intent intent=new Intent(getActivity(), add_borrower.class);

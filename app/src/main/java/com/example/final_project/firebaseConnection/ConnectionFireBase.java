@@ -42,7 +42,7 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Date;
 
-
+//Todo : Add Time limits in the fetching process and low-internet connectivity alert
 public class ConnectionFireBase {
     private String TAG = "ConnectionFireBase";
     private FirebaseDatabase database;
@@ -340,7 +340,7 @@ public class ConnectionFireBase {
         Log.e(TAG,"data check : "+"Member/"+l+"/");
         final String[] image = new String[1];
         final String[] name = new String[1];
-        long result[] = new long[1];
+        long[] result = new long[1];
         ChildEventListener listener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
@@ -374,7 +374,6 @@ public class ConnectionFireBase {
                         if(sqLiteDatabase != null) result[0] = sqLiteDatabase.insert(BlankContract.BlankEnter.BORROWER_TABLE_NAME, "notificationCheck",values);
                         Log.e(TAG,result[0]+": result ");
                         if(result[0] != -1){
-                            sqLiteDatabase = mdbHelper.getReadableDatabase();
                             //Adding the notification in the firebase
                             Home_DataContact contact = new Home_DataContact(context);
                             contact.setId(new UserDatadbProvider(context).getEmail());
@@ -386,7 +385,7 @@ public class ConnectionFireBase {
                             contact.setName(new UserDatadbProvider(context).getName());
                             Log.e(TAG,"Name ; "+new UserDatadbProvider(context).getName());
                             contact.setImageUrl(new UserDatadbProvider(context).getImage());
-                            contact.setPayed(Boolean.FALSE+"");
+                            contact.setPayed(false);
                             connection.pushNotification(contact,i);
                         }
 
@@ -432,8 +431,6 @@ public class ConnectionFireBase {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                Log.e(TAG,"GetBorrowDbProvider function : " +snapshot.getChildren());
-                Log.e(TAG,"GetBorrowDbProvider function : " +snapshot.getValue(UserData.class).getName());
                 result[0] = snapshot.getValue(UserData.class);
                 //Log.e(TAG, "sad" + result[0].getId());
             }
