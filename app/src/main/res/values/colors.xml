@@ -4,4 +4,9 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="universal">#8DFFFF</color>
+    <color name="text">#000</color>
+    <color name="setting_layout_background">#FFFFFF</color>
+    <color name="setting_background">#DFDFDF</color>
+    <color name="green">#0CCF13</color>
 </resources>
