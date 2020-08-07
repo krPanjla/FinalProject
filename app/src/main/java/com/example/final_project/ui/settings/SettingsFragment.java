@@ -69,7 +69,7 @@ public class SettingsFragment extends Fragment {
         cardView.setOnClickListener(v -> {
 
 
-            FragmentManager fragmentManager=getChildFragmentManager();
+            FragmentManager fragmentManager=getParentFragmentManager();
             FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.main_frame,profileFragment);
             fragmentTransaction.commit();

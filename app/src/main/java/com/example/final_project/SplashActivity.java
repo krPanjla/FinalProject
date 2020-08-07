@@ -201,9 +201,12 @@ public class SplashActivity extends AppCompatActivity {
                                    Log.e(TAG,"The read failed: " + databaseError.getCode());
                                }
                            });
-                           startActivity(new Intent(SplashActivity.this, RootActivity.class)
-                                           .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                                       this.finish();
+                          new Handler().postDelayed(()->{
+                                      startActivity(new Intent(SplashActivity.this, RootActivity.class)
+                                              .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                                      this.finish();
+                           },
+                           1000);
 
                        }else{
                            new Handler().postDelayed(

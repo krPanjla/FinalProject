@@ -39,8 +39,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.sql.Timestamp;
+import java.text.Format;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
 
 //Todo : Add Time limits in the fetching process and low-internet connectivity alert
 public class ConnectionFireBase {
@@ -74,6 +76,13 @@ public class ConnectionFireBase {
                 l.append(username.charAt(i));
         }
         myRef = database.getReference("Member/"+l+"/Notification/");
+        myRef.push().setValue(data);
+        Log.e(TAG,"Data Set to database");
+    }
+
+    public void pushToLends(Home_DataContact data, String username){
+        String l= Formate.toUsername(username);
+        myRef = database.getReference("Member/"+l+"/lends/");
         myRef.push().setValue(data);
         Log.e(TAG,"Data Set to database");
     }
@@ -376,16 +385,25 @@ public class ConnectionFireBase {
                         if(result[0] != -1){
                             //Adding the notification in the firebase
                             Home_DataContact contact = new Home_DataContact(context);
+                            Home_DataContact contact2 = new Home_DataContact(context);
                             contact.setId(new UserDatadbProvider(context).getEmail());
                             contact.setDate(date);
                             contact.setAmount(a);
                             contact.setCount(new Timestamp(new Date().getTime()).getTime());
-                            Log.e(TAG,"Current timestamp : "+new Timestamp(new Date().getTime()).getTime());
-                            Log.e(TAG, name[0]);
                             contact.setName(new UserDatadbProvider(context).getName());
-                            Log.e(TAG,"Name ; "+new UserDatadbProvider(context).getName());
                             contact.setImageUrl(new UserDatadbProvider(context).getImage());
                             contact.setPayed(false);
+
+
+                            contact2.setId(i);
+                            contact2.setDate(date);
+                            contact2.setAmount(a);
+                            contact2.setCount(new Timestamp(new Date().getTime()).getTime());
+                            contact2.setName(name[0]);
+                            contact2.setImageUrl(image[0]);
+                            contact2.setPayed(false);
+
+                            connection.pushToLends(contact2, Formate.toUsername(new UserDatadbProvider(context).getEmail()));
                             connection.pushNotification(contact,i);
                         }
 
