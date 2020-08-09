@@ -1,22 +1,18 @@
 package com.example.final_project;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
-import android.app.FragmentTransaction;
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.example.final_project.Database.BlankContract;
-import com.example.final_project.Database.BorrowersDB.Home_DataContact;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import com.example.final_project.Database.DatabaseHelper;
-import com.example.final_project.Database.useradate.UserDatadbProvider;
 import com.example.final_project.firebaseConnection.ConnectionFireBase;
 
 
@@ -26,6 +22,7 @@ public class add_borrower extends AppCompatActivity {
     private String TAG = "add_borrow";
     private String i,e;
     private long a;
+    private ImageButton scanner;
     private final DatabaseHelper mdbHelper = new DatabaseHelper(this);
     //TODO Read below line
     //Required sigaction, We can create this requester(add_borrow) Activity as dialog box in the HomeFragment to make application more user friendly?
@@ -38,6 +35,7 @@ public class add_borrower extends AppCompatActivity {
         email=findViewById(R.id.enter_mail);
         amount=findViewById(R.id.enter_amount);
         done=findViewById(R.id.button_done);
+        scanner = findViewById(R.id.scanner);
 
         done.setOnClickListener(v -> {
             //email -> data in database
@@ -69,7 +67,28 @@ public class add_borrower extends AppCompatActivity {
             }
         });
 
+        scanner.setOnClickListener(v->{
+            new IntentIntegrator(this).initiateScan();
+        });
 
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result =   IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() == null) {
+                Toast.makeText(this,    "Cancelled",Toast.LENGTH_LONG).show();
+            } else {
+                updateText(result.getContents());
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void updateText(String scanCode) {
+        id.setText(scanCode);
+    }
 }

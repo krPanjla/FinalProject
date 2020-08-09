@@ -79,6 +79,12 @@
                     android:text="Name"
                     android:textColor="@color/text"
                     android:textSize="28sp" />
+
+                <ImageView
+                    android:id="@+id/qrcode"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"/>
             </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>

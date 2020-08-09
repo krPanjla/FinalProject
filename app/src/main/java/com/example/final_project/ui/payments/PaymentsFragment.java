@@ -43,6 +43,7 @@ public class PaymentsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_payments, container, false);
         listView =  view.findViewById(R.id.pay_list);
+
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Member/"+ Formate.toUsername(new UserDatadbProvider(getContext()).getEmail())+"/DueBill");
         ref.addChildEventListener(new ChildEventListener() {
             @Override
@@ -84,10 +85,12 @@ public class PaymentsFragment extends Fragment {
 
         if(list != null){
             listView.setAdapter(arrayAdapter);
+            list.clear();
         }
         else {
-            ArrayAdapter<String> arrayAdapter1 = new ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,new String[]{"No Bill to pay"});
+            ArrayAdapter arrayAdapter1 = new ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,new String[]{"No Bill to pay"});
             listView.setAdapter(arrayAdapter1);
+            list.clear();
         }
         return view;
     }

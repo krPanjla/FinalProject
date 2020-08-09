@@ -7,19 +7,43 @@
     android:orientation="vertical"
     tools:context="com.example.final_project.add_borrower"
     android:padding="20dp">
-
-    <com.google.android.material.textfield.TextInputLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:orientation="horizontal">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/id_"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="ID"
-            android:id="@+id/enter_id"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_toStartOf="@id/scanner"
+            android:layout_toLeftOf="@id/scanner"
+            android:orientation="horizontal"
+            tools:ignore="RelativeOverlap">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/enter_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="@id/scanner"
+                android:layout_alignParentRight="@id/scanner"
+                android:hint="ID" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/scanner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/id_"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="false"
+            android:layout_alignParentBottom="false"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_baseline_filter_center_focus_24" />
+    </RelativeLayout>
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
