@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -81,7 +82,8 @@ public class add_borrower extends AppCompatActivity {
             if (result.getContents() == null) {
                 Toast.makeText(this,    "Cancelled",Toast.LENGTH_LONG).show();
             } else {
-                updateText(result.getContents());
+                Log.e(TAG,"This data back from Scan : "+result.getContents());
+                updateText(result.getContents()+"");
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
