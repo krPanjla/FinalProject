@@ -65,7 +65,7 @@ public class ConnectionFireBase {
         }
         myRef = database.getReference("Member/"+l+"/UserProfile/");
 
-        myRef.push().setValue(data);
+        myRef.setValue(data);
         Log.e(TAG,"Data Set to database");
     }
 
@@ -349,7 +349,6 @@ public class ConnectionFireBase {
         Log.e(TAG,"data check : "+"Member/"+l+"/");
         final String[] image = new String[1];
         final String[] name = new String[1];
-        long[] result = new long[1];
         ChildEventListener listener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
@@ -357,55 +356,28 @@ public class ConnectionFireBase {
                     if(ds.getKey().equals("name")){
                         name[0] = ds.getValue(String.class);
                         Log.e(TAG,"Name !: " + name[0]);
-                        Log.e(TAG,"Name #: " + name[0]);
-                        Log.e(TAG,"Previous Post ID: ");
-
-                        SQLiteDatabase sqLiteDatabase = null;
                         ConnectionFireBase connection = new ConnectionFireBase();
-                        ContentValues values = new ContentValues();
+                        //Adding the notification in the firebase
+                        Home_DataContact contact = new Home_DataContact(context);
+                        Home_DataContact contact2 = new Home_DataContact(context);
+                        contact.setId(new UserDatadbProvider(context).getEmail());
+                        contact.setDate(date);
+                        contact.setAmount(a);
+                        contact.setCount(new Timestamp(new Date().getTime()).getTime());
+                        contact.setName(new UserDatadbProvider(context).getName());
+                        contact.setImageUrl(new UserDatadbProvider(context).getImage());
+                        contact.setPayed(false);
+                        //Adding lends to firebase
+                        contact2.setId(i);
+                        contact2.setDate(date);
+                        contact2.setAmount(a);
+                        contact2.setCount(new Timestamp(new Date().getTime()).getTime());
+                        contact2.setName(name[0]);
+                        contact2.setImageUrl(image[0]);
+                        contact2.setPayed(false);
 
-                        try {
-                            sqLiteDatabase = mdbHelper.getWritableDatabase();
-                            Log.e(TAG,"values : "+i+"  "+date+"  "+a);
-                            Log.e(TAG,"Name : "+ name[0]);
-                            Log.e(TAG,"Image : "+ image[0]);
-
-                            values.put(BlankContract.BlankEnter._ID,i);
-                            values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_NAME, name[0]);
-                            values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_DATE,date);
-                            values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_IMAGE, image[0]);
-                            values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_FLAG,Boolean.FALSE);
-                            values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_AMOUNT,a);
-
-                        }catch(Exception ex){
-                            Log.e(TAG,"In side Exception "+ex);
-                        }
-                        if(sqLiteDatabase != null) result[0] = sqLiteDatabase.insert(BlankContract.BlankEnter.BORROWER_TABLE_NAME, "notificationCheck",values);
-                        Log.e(TAG,result[0]+": result ");
-                        if(result[0] != -1){
-                            //Adding the notification in the firebase
-                            Home_DataContact contact = new Home_DataContact(context);
-                            Home_DataContact contact2 = new Home_DataContact(context);
-                            contact.setId(new UserDatadbProvider(context).getEmail());
-                            contact.setDate(date);
-                            contact.setAmount(a);
-                            contact.setCount(new Timestamp(new Date().getTime()).getTime());
-                            contact.setName(new UserDatadbProvider(context).getName());
-                            contact.setImageUrl(new UserDatadbProvider(context).getImage());
-                            contact.setPayed(false);
-
-
-                            contact2.setId(i);
-                            contact2.setDate(date);
-                            contact2.setAmount(a);
-                            contact2.setCount(new Timestamp(new Date().getTime()).getTime());
-                            contact2.setName(name[0]);
-                            contact2.setImageUrl(image[0]);
-                            contact2.setPayed(false);
-
-                            connection.pushToLends(contact2, Formate.toUsername(new UserDatadbProvider(context).getEmail()));
-                            connection.pushNotification(contact,i);
-                        }
+                        connection.pushToLends(contact2, Formate.toUsername(new UserDatadbProvider(context).getEmail()));
+                        connection.pushNotification(contact,i);
 
                     }else if(ds.getKey().equals("image")){
                         image[0] = ds.getValue(String.class);
@@ -429,7 +401,7 @@ public class ConnectionFireBase {
 
         myRef.addChildEventListener(listener);
 
-        return result[0] != -1;
+        return true;
     }
 
     /**

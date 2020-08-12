@@ -84,6 +84,7 @@ public class add_borrower extends AppCompatActivity {
             } else {
                 Log.e(TAG,"This data back from Scan : "+result.getContents());
                 updateText(result.getContents()+"");
+                Toast.makeText(this,result.getContents()+"",Toast.LENGTH_LONG).show();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

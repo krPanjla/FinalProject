@@ -5,9 +5,21 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.example.final_project.CheckService.Formate;
 import com.example.final_project.Database.BlankContract;
 import com.example.final_project.Database.DatabaseHelper;
+import com.example.final_project.Database.useradate.UserDatadbProvider;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Home_DataContact {
@@ -21,13 +33,17 @@ public class Home_DataContact {
     private long count;
     private double amount;
 
+    public Home_DataContact(){
+        //For Firebase use
+    }
+
     public Home_DataContact(Context context){
         DatabaseHelper mdbHelper;
         mdbHelper = new DatabaseHelper(context);
         read = mdbHelper.getReadableDatabase();
     }
 
-    public static int getCount(Context context){
+    public static int Count(Context context){
         DatabaseHelper mdbHelper;
         SQLiteDatabase read ;
         mdbHelper = new DatabaseHelper(context);
@@ -41,19 +57,22 @@ public class Home_DataContact {
     public void setCount(long count) {
         this.count = count;
     }
+    public long getCount() {
+        return this.count;
+    }
 
-    public int Count(){
-        try (Cursor cursor = read.query(BlankContract.BlankEnter.BORROWER_TABLE_NAME, null, null, null, null, null, null)) {
-            if(cursor.getCount() == -1) Log.e(TAG,"getCount : "+cursor.getCount());
-            return Math.max(cursor.getCount(),0);
-        }
-    }
-    public Long getCount(){
-        try (Cursor cursor = read.query(BlankContract.BlankEnter.BORROWER_TABLE_NAME, null, null, null, null, null, null)) {
-            if(cursor.getCount() == -1) Log.e(TAG,"getCount : "+cursor.getCount());
-            return this.count;
-        }
-    }
+//    public int Count(){
+//        try (Cursor cursor = read.query(BlankContract.BlankEnter.BORROWER_TABLE_NAME, null, null, null, null, null, null)) {
+//            if(cursor.getCount() == -1) Log.e(TAG,"getCount : "+cursor.getCount());
+//            return Math.max(cursor.getCount(),0);
+//        }
+//    }
+//    public Long getCount(){
+//        try (Cursor cursor = read.query(BlankContract.BlankEnter.BORROWER_TABLE_NAME, null, null, null, null, null, null)) {
+//            if(cursor.getCount() == -1) Log.e(TAG,"getCount : "+cursor.getCount());
+//            return this.count;
+//        }
+//    }
 
     public String getName() {
         return name;
@@ -102,7 +121,6 @@ public class Home_DataContact {
     public void setAmount(double amount) {
         this.amount = amount;
     }
-    private static int lastContactId = 0;
 
     public static ArrayList<Home_DataContact> createContactsList(Context context) {
         ArrayList<Home_DataContact> mContacts = new ArrayList<>();
@@ -118,7 +136,7 @@ public class Home_DataContact {
             contact.setDate(cursor.getString(2));
             contact.setImageUrl(cursor.getString(3));
             contact.setPayed(Boolean.parseBoolean(cursor.getString(4)));
-            contact.setAmount(cursor.getDouble(5));
+            contact.setAmount(cursor.getDouble(6));
             mContacts.add(contact);
         }while(cursor.moveToNext());
         cursor.close();

@@ -7,16 +7,24 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.example.final_project.CheckService.Formate;
+import com.example.final_project.Database.BlankContract;
+import com.example.final_project.Database.BorrowersDB.Home_DataContact;
+import com.example.final_project.Database.DatabaseHelper;
 import com.example.final_project.Database.useradate.UserDatadbProvider;
 import com.example.final_project.firebaseConnection.UserNotification;
 import com.example.final_project.ui.customNotificationBox.CustomNotificationView;
@@ -25,6 +33,7 @@ import com.example.final_project.ui.home.HomeFragment;
 import com.example.final_project.ui.payments.PaymentsFragment;
 import com.example.final_project.ui.settings.SettingsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -77,8 +86,8 @@ public class RootActivity extends AppCompatActivity {
                 NotificationData post = dataSnapshot.getValue(NotificationData.class);
                 if(dataSnapshot.getChildrenCount()!=0) {
                     assert post != null;
-                    Log.e(TAG,"Name : " + post.getName());
-                    Log.e(TAG,"Id : " + post.getId());
+                    //Log.e(TAG,"Name : " + post.getName());
+                    //Log.e(TAG,"Id : " + post.getId());
                     notificationDataList.add(post);
                     //TODO change the color of the notification item in the menu Bar to the normal use the notification icon present in the Drawable folder
                 }else{
@@ -97,8 +106,8 @@ public class RootActivity extends AppCompatActivity {
                 NotificationData post = snapshot.getValue(NotificationData.class);
                 if(snapshot.getChildrenCount()!=0) {
                     assert post != null;
-                    Log.e(TAG,"Name : " + post.getName());
-                    Log.e(TAG,"Id : " + post.getId());
+                    //Log.e(TAG,"Name : " + post.getName());
+                    //Log.e(TAG,"Id : " + post.getId());
                     notificationDataList.add(post);
                 }
             }
@@ -112,7 +121,7 @@ public class RootActivity extends AppCompatActivity {
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
 
-                Log.e(TAG,snapshot.toString()+"Remove Data");
+                //Log.e(TAG,snapshot.toString()+"Remove Data");
                 NotificationData post = snapshot.getValue(NotificationData.class);
 
                 notificationDataList.remove(post);
@@ -157,6 +166,56 @@ public class RootActivity extends AppCompatActivity {
             return true;
         });
 
+        //adding data in database form firebase
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Member/"+email+"/lends/");
+        reference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Home_DataContact post = snapshot.getValue(Home_DataContact.class);
+                Log.e(TAG,"POST : "+snapshot.getValue());
+                if(post!=null){
+                    SQLiteDatabase database1 = new DatabaseHelper(getApplicationContext()).getWritableDatabase();
+                    Log.e(TAG,"Email : "+post.getId());
+                    Log.e(TAG,"Count : "+post.getCount());
+                    Log.e(TAG,"Amount : "+post.getAmount());
+                    ContentValues values = new ContentValues();
+                    values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_COUNT,post.getCount());
+                    values.put(BlankContract.BlankEnter._ID,post.getId());
+                    values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_NAME, post.getName());
+                    values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_DATE,post.getDate());
+                    values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_IMAGE, post.getImageUrl());
+                    values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_FLAG,post.getPayed());
+                    values.put(BlankContract.BlankEnter.COLUMNS_BORROWER_AMOUNT,post.getAmount());
+                    long i = database1.insert(BlankContract.BlankEnter.BORROWER_TABLE_NAME, BlankContract.BlankEnter.COLUMNS_BORROWER_COUNT,values);
+                    if(i!=-1){
+                        Log.e(TAG,"Inserted");
+                        getSupportFragmentManager().beginTransaction().detach(homeFragment).attach(homeFragment).commit();
+
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
     void setFragment(Fragment fragment){
         FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();

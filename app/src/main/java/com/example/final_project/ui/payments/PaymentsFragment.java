@@ -54,8 +54,6 @@ public class PaymentsFragment extends Fragment {
                     assert post != null;
                     Log.e(TAG,post.isPayed()+"");
                     list.add(post);
-
-//                    getChildFragmentManager().beginTransaction().detach(PaymentsFragment.this).attach(PaymentsFragment.this).commit();
                 }
             }
 
@@ -85,12 +83,10 @@ public class PaymentsFragment extends Fragment {
 
         if(list != null){
             listView.setAdapter(arrayAdapter);
-            list.clear();
         }
         else {
             ArrayAdapter arrayAdapter1 = new ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,new String[]{"No Bill to pay"});
             listView.setAdapter(arrayAdapter1);
-            list.clear();
         }
         return view;
     }
