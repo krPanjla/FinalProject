@@ -10,7 +10,6 @@ package com.example.final_project.ui.home;
         import android.widget.ImageView;
         import android.widget.TextView;
 
-        import androidx.annotation.ColorRes;
         import androidx.annotation.NonNull;
         import androidx.cardview.widget.CardView;
         import androidx.recyclerview.widget.RecyclerView;
@@ -42,7 +41,7 @@ class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         contactView = inflater.inflate(R.layout.home_template, parent, false);
 
         // Return a new holder instance
-        return  new ViewHolder(contactView);
+        return new ViewHolder(contactView);
     }
 
     // Involves populating data into the item through holder
@@ -72,7 +71,7 @@ class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         return mHomeDataContacts.size()-1;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         // Your holder should contain a member variable
         // for any view that will be set as you render a row

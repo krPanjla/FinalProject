@@ -25,6 +25,8 @@ public class BlankContract {
         public final static String COLUMNS_BORROWER_FLAG = "flag";
         public final static String COLUMNS_BORROWER_COUNT = "count";
 
+
+        public final static String PAYMENT_TABLE_NAME = "Payment";
         /**
          * these variable defining the type of gender using in the application
          */

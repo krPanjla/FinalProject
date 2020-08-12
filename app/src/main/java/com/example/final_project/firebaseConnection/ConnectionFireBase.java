@@ -343,12 +343,13 @@ public class ConnectionFireBase {
      * @param context get the context of the activity
      * @return  boolean value for if data inserted properly*/
 
-    public boolean pushNotification(String i, String date, long a, DatabaseHelper mdbHelper,Context context){
+    public boolean pushNotification(String i, String date, double a, DatabaseHelper mdbHelper,Context context){
         String l= Formate.toUsername(i);
         myRef = database.getReference("Member/"+l+"/");
         Log.e(TAG,"data check : "+"Member/"+l+"/");
         final String[] image = new String[1];
         final String[] name = new String[1];
+        final Long time = new Timestamp(new Date().getTime()).getTime();
         ChildEventListener listener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
@@ -363,7 +364,7 @@ public class ConnectionFireBase {
                         contact.setId(new UserDatadbProvider(context).getEmail());
                         contact.setDate(date);
                         contact.setAmount(a);
-                        contact.setCount(new Timestamp(new Date().getTime()).getTime());
+                        contact.setCount(time);
                         contact.setName(new UserDatadbProvider(context).getName());
                         contact.setImageUrl(new UserDatadbProvider(context).getImage());
                         contact.setPayed(false);
@@ -371,7 +372,7 @@ public class ConnectionFireBase {
                         contact2.setId(i);
                         contact2.setDate(date);
                         contact2.setAmount(a);
-                        contact2.setCount(new Timestamp(new Date().getTime()).getTime());
+                        contact2.setCount(time);
                         contact2.setName(name[0]);
                         contact2.setImageUrl(image[0]);
                         contact2.setPayed(false);

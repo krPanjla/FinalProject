@@ -22,7 +22,7 @@ public class add_borrower extends AppCompatActivity {
     Button done;
     private String TAG = "add_borrow";
     private String i,e;
-    private long a;
+    private double a;
     private ImageButton scanner;
     private final DatabaseHelper mdbHelper = new DatabaseHelper(this);
     //TODO Read below line
@@ -44,7 +44,7 @@ public class add_borrower extends AppCompatActivity {
                 //fetching values from edit texts
                 i = id.getText().toString().trim();
                 e = email.getText().toString().trim();
-                a = Long.parseLong(amount.getText().toString().trim());
+                a = Double.parseDouble(amount.getText().toString().trim());
                 boolean rowCount = false;
                 ConnectionFireBase connection = new ConnectionFireBase();
                 //save dataContact is a method in database class which inserts the values to the table

@@ -5,20 +5,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.widget.Toolbar;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import com.example.final_project.CheckService.Formate;
@@ -26,7 +20,6 @@ import com.example.final_project.Database.BlankContract;
 import com.example.final_project.Database.BorrowersDB.Home_DataContact;
 import com.example.final_project.Database.DatabaseHelper;
 import com.example.final_project.Database.useradate.UserDatadbProvider;
-import com.example.final_project.firebaseConnection.UserNotification;
 import com.example.final_project.ui.customNotificationBox.CustomNotificationView;
 import com.example.final_project.ui.customNotificationBox.NotificationData;
 import com.example.final_project.ui.home.HomeFragment;
@@ -39,10 +32,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 
 public class RootActivity extends AppCompatActivity {
@@ -191,7 +182,6 @@ public class RootActivity extends AppCompatActivity {
                     if(i!=-1){
                         Log.e(TAG,"Inserted");
                         getSupportFragmentManager().beginTransaction().detach(homeFragment).attach(homeFragment).commit();
-
                     }
                 }
             }
@@ -203,6 +193,16 @@ public class RootActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                SQLiteDatabase database1 = new DatabaseHelper(getApplicationContext()).getWritableDatabase();
+                Home_DataContact post = snapshot.getValue(Home_DataContact.class);
+                if(post!=null){
+                    boolean i = database1.delete(BlankContract.BlankEnter.BORROWER_TABLE_NAME, BlankContract.BlankEnter.COLUMNS_BORROWER_COUNT+"=?",new String[]{String.valueOf(post.getCount())})>0;
+                    if(i){
+                        Log.e(TAG,"Delete");
+                        getSupportFragmentManager().beginTransaction().detach(homeFragment).attach(homeFragment).commit();
+                        Snackbar.make(findViewById(R.id.ll2),post.getName()+" do not accept your request",Snackbar.LENGTH_LONG).show();
+                    }
+                }
 
             }
 
