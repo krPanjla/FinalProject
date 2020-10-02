@@ -1,2 +1,3 @@
 # Project__android
-this a app from our final project
+this is a app from our final project
+Based on Android
