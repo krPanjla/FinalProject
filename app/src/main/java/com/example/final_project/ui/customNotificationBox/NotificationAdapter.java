@@ -32,14 +32,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.content.ContentValues.TAG;
 
 public class NotificationAdapter extends ArrayAdapter<NotificationData> {
 
     private Context mContext;
+    private String TAG = "NotificationAdapter";
     private List<NotificationData> notificationDataList;
 
     /**
@@ -124,11 +124,28 @@ public class NotificationAdapter extends ArrayAdapter<NotificationData> {
         denied.setOnClickListener(v -> {
 
             DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
-            NotificationData data = new NotificationData();
+            DatabaseReference myRef1 = FirebaseDatabase.getInstance().getReference();
             Query query = myRef.child("Member/"+ Formate.toUsername(new UserDatadbProvider(mContext).getEmail())+"/Notification").orderByChild("count").equalTo(currentNotification.getCount());
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot dataSnapshot:
+                            snapshot.getChildren()) {
+                        dataSnapshot.getRef().removeValue();
+                        Log.e(TAG,"Data removed");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e(TAG, "onCancelled", error.toException());
+                }
+            });
+            Query query1 = myRef1.child("Member/"+ Formate.toUsername(currentNotification.getId())+"/lends/").orderByChild("count").equalTo(currentNotification.getCount());
+            query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Log.e(TAG,currentNotification.getCount()+"");
                     for (DataSnapshot dataSnapshot:
                             snapshot.getChildren()) {
                         dataSnapshot.getRef().removeValue();

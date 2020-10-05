@@ -67,6 +67,14 @@
                         android:scaleType="centerCrop"
                         android:src="@drawable/account_pic" />
 
+                    <com.github.ybq.android.spinkit.SpinKitView
+                        android:id="@+id/progressbar2"
+                        style="@style/SpinKitView.Large.Wave"
+                        android:layout_width="77dp"
+                        android:layout_height="67dp"
+                        android:layout_gravity="center"
+                        app:SpinKit_Color="@color/colorAccent" />
+
                 </androidx.cardview.widget.CardView>
 
                 <TextView
@@ -79,6 +87,12 @@
                     android:text="Name"
                     android:textColor="@color/text"
                     android:textSize="28sp" />
+
+                <ImageView
+                    android:id="@+id/qrcode"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"/>
             </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
@@ -87,6 +101,7 @@
             <!--Profile column end -->
 
             <!--Theme column start-->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -326,17 +341,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <com.github.ybq.android.spinkit.SpinKitView
-            android:id="@+id/progressbar2"
-            style="@style/SpinKitView.Large.Wave"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_gravity="center"
-            app:SpinKit_Color="@color/colorAccent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

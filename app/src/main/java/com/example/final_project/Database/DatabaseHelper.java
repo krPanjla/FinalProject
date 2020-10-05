@@ -30,8 +30,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             BlankContract.BlankEnter.COLUMNS_BORROWER_DATE+" TEXT,"+
             BlankContract.BlankEnter.COLUMNS_BORROWER_IMAGE+" TEXT,"+
             BlankContract.BlankEnter.COLUMNS_BORROWER_FLAG+" TEXT NOT NULL ,"+
+            BlankContract.BlankEnter.COLUMNS_BORROWER_COUNT+" TEXT NOT NULL PRIMARY KEY ,"+
             /*RAEL is use to store the floating point number in the sqlite database*/
-            BlankContract.BlankEnter.COLUMNS_BORROWER_AMOUNT +" REAL NOT NULL) ;";
+            BlankContract.BlankEnter.COLUMNS_BORROWER_AMOUNT +" REAL NOT NULL ) ;";
+
+//
+//    public static final String CREATE_TABLE_PAYMENT = "CREATE TABLE "+ BlankContract.BlankEnter.PAYMENT_TABLE_NAME+"("+
+//            BlankContract.BlankEnter._ID + " TEXT NOT NULL, "+
+//            BlankContract.BlankEnter.PAYMENT_BORROWER_NAME + " TEXT NOT NULL, "+
+//            BlankContract.BlankEnter.PAYMENT_BORROWER_DATE+" TEXT,"+
+//            BlankContract.BlankEnter.PAYMENT_BORROWER_IMAGE+" TEXT,"+
+//            BlankContract.BlankEnter.PAYMENT_BORROWER_FLAG+" TEXT NOT NULL ,"+
+//            BlankContract.BlankEnter.PAYMENT_BORROWER_COUNT+" TEXT NOT NULL PRIMARY KEY ,"+
+//            BlankContract.BlankEnter.PAYMENT_BORROWER_AMOUNT +" REAL NOT NULL ) ;";
 
     public static final int TABLE_VERSION = 1;
 
